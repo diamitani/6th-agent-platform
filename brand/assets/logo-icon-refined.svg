@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <defs>
+    <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF6B00"/>
+      <stop offset="50%" style="stop-color:#FF8C00"/>
+      <stop offset="100%" style="stop-color:#E85D00"/>
+    </linearGradient>
+    <radialGradient id="glowGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FF6B00;stop-opacity:0.12"/>
+      <stop offset="60%" style="stop-color:#FF6B00;stop-opacity:0.04"/>
+      <stop offset="100%" style="stop-color:#FF6B00;stop-opacity:0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Glow -->
+  <circle cx="200" cy="200" r="160" fill="url(#glowGrad)"/>
+
+  <!-- Outer ring — the "6" curves around like a championship ring / eye socket -->
+  <path d="
+    M 200 55
+    C 280 55 345 120 345 200
+    C 345 280 280 345 200 345
+    C 120 345 55 280 55 200
+    C 55 120 120 55 200 55
+    Z
+  " fill="none" stroke="url(#ringGrad)" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- The "6" tail hook — wraps inward to form the eye corner -->
+  <path d="
+    M 320 260
+    C 305 310 265 340 200 345
+  " fill="none" stroke="url(#ringGrad)" stroke-width="24" stroke-linecap="round"/>
+
+  <!-- Subtle inner ring -->
+  <circle cx="200" cy="200" r="95" fill="none" stroke="#FF6B00" stroke-width="1.5" stroke-opacity="0.15"/>
+
+  <!-- The "A" — sharp, forward-pointing, champion's arrow -->
+  <polygon points="200,140 158,260 200,238 242,260" fill="#1A1A1A" stroke="#FF6B00" stroke-width="2" stroke-opacity="0.25"/>
+
+  <!-- A crossbar — the "A" beam, representing stability and strength -->
+  <line x1="175" y1="232" x2="225" y2="232" stroke="#1A1A1A" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- Eye highlight / spark -->
+  <ellipse cx="178" cy="178" rx="8" ry="5" fill="#FF6B00" opacity="0.35" transform="rotate(-30 178 178)"/>
+
+  <!-- Small accent dot — the "champion's focus" -->
+  <circle cx="200" cy="200" r="4" fill="#FF6B00" opacity="0.5"/>
+</svg>

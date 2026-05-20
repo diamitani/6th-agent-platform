@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <defs>
+    <linearGradient id="primaryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF6B00"/>
+      <stop offset="100%" style="stop-color:#E85D00"/>
+    </linearGradient>
+    <linearGradient id="eyeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF6B00;stop-opacity:0.15"/>
+      <stop offset="100%" style="stop-color:#FF6B00;stop-opacity:0.05"/>
+    </linearGradient>
+    <linearGradient id="pupilGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1A1A1A"/>
+      <stop offset="100%" style="stop-color:#2A2A2A"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Outer ring — the "6" forms a circular eye -->
+  <!-- The 6 starts at top, curves around clockwise, hooks inward -->
+  <path d="
+    M 200 60
+    C 277 60 340 123 340 200
+    C 340 277 277 340 200 340
+    C 123 340 60 277 60 200
+    C 60 123 123 60 200 60
+    Z
+  " fill="none" stroke="url(#primaryGrad)" stroke-width="28" stroke-linecap="round"/>
+
+  <!-- The "6" tail — curves inward at the bottom right, forming the eye shape -->
+  <path d="
+    M 310 250
+    C 290 310 250 335 200 340
+  " fill="none" stroke="url(#primaryGrad)" stroke-width="28" stroke-linecap="round"/>
+
+  <!-- Inner eye glow ring -->
+  <circle cx="200" cy="200" r="85" fill="url(#eyeGrad)" stroke="#FF6B00" stroke-width="2" stroke-opacity="0.2"/>
+
+  <!-- The "A" as pupil — sharp, forward, champion -->
+  <path d="
+    M 200 145
+    L 165 255
+    L 200 235
+    L 235 255
+    Z
+  " fill="url(#pupilGrad)" stroke="#FF6B00" stroke-width="2" stroke-opacity="0.3"/>
+
+  <!-- A crossbar — the focus line -->
+  <line x1="182" y1="225" x2="218" y2="225" stroke="#FF6B00" stroke-width="4" stroke-opacity="0.6" stroke-linecap="round"/>
+
+  <!-- Accent dot — the spark, the "eye" highlight -->
+  <circle cx="185" cy="185" r="6" fill="#FF6B00" opacity="0.4"/>
+</svg>

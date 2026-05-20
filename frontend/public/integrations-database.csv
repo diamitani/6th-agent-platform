@@ -1,0 +1,99 @@
+name,category,description,auth_type,api_endpoint,docs_url,mcp_available,mcp_server
+HubSpot,CRM,"CRM, contacts, deals, pipeline management",oauth,https://api.hubapi.com,https://developers.hubspot.com,true,@rostr/mcp-hubspot
+Salesforce,CRM,"Enterprise CRM, accounts, opportunities",oauth,https://login.salesforce.com,https://developer.salesforce.com,true,@rostr/mcp-salesforce
+Pipedrive,CRM,"Sales pipeline & deal management",api_key,https://api.pipedrive.com/v1,https://developers.pipedrive.com,true,@rostr/mcp-pipedrive
+Close CRM,CRM,"Sales communication & engagement",api_key,https://api.close.com,https://developer.close.com,false,
+Zoho CRM,CRM,"Sales, marketing & support CRM",oauth,https://www.zohoapis.com/crm,https://www.zoho.com/crm/developer,true,@rostr/mcp-zoho
+Mailchimp,Marketing,"Email marketing & automation",oauth,https://us1.api.mailchimp.com/3.0,https://mailchimp.com/developer,true,@rostr/mcp-mailchimp
+HubSpot Marketing,Marketing,"Marketing hub, emails, campaigns",oauth,https://api.hubapi.com,https://developers.hubspot.com,true,@rostr/mcp-hubspot
+Klaviyo,Marketing,"Email & SMS marketing platform",api_key,https://a.klaviyo.com/api,https://developers.klaviyo.com,true,@rostr/mcp-klaviyo
+SendGrid,Marketing,"Transactional email delivery",api_key,https://api.sendgrid.com/v3,https://docs.sendgrid.com,true,@rostr/mcp-sendgrid
+Brevo,Marketing,"Email marketing, SMS & automation",api_key,https://api.brevo.com/v3,https://developers.brevo.com,true,@rostr/mcp-brevo
+ActiveCampaign,Marketing,"Email marketing & CRM automation",api_key,https://api.activehosted.com,https://developers.activecampaign.com,true,@rostr/mcp-activecampaign
+ConvertKit,Marketing,"Creator-focused email marketing",api_key,https://api.convertkit.com/v3,https://developers.convertkit.com,false,
+Customer.io,Marketing,"Automated messaging & email",api_key,https://api.customer.io/v1,https://customer.io/docs/api,false,
+X / Twitter,Social,"Post tweets, read timeline, search",oauth,https://api.twitter.com/2,https://developer.twitter.com,true,@rostr/mcp-twitter
+Instagram Graph,Social,"Instagram content & insights",oauth,https://graph.facebook.com/v18.0,https://developers.facebook.com,true,@rostr/mcp-instagram
+LinkedIn API,Social,"LinkedIn profile, posts, messaging",oauth,https://api.linkedin.com/v2,https://developer.linkedin.com,true,@rostr/mcp-linkedin
+TikTok API,Social,"Content publishing & analytics",oauth,https://open-api.tiktok.com,https://developers.tiktok.com,true,@rostr/mcp-tiktok
+YouTube Data,Social,"Video analytics, search, comments",oauth,https://www.googleapis.com/youtube/v3,https://developers.google.com/youtube,true,@rostr/mcp-youtube
+Facebook Graph,Social,"Pages, posts, ads, insights",oauth,https://graph.facebook.com/v18.0,https://developers.facebook.com,true,@rostr/mcp-facebook
+Reddit API,Social,"Subreddits, posts, comments",oauth,https://oauth.reddit.com,https://www.reddit.com/dev/api,true,@rostr/mcp-reddit
+Pinterest API,Social,"Pins, boards, analytics",oauth,https://api.pinterest.com/v5,https://developers.pinterest.com,true,@rostr/mcp-pinterest
+Google Analytics,Analytics,"Web & app analytics",oauth,https://analyticsdata.googleapis.com,https://developers.google.com/analytics,true,@rostr/mcp-google-analytics
+Mixpanel,Analytics,"Product & user analytics",api_key,https://api.mixpanel.com,https://developer.mixpanel.com,true,@rostr/mcp-mixpanel
+Amplitude,Analytics,"Product analytics & user behavior",api_key,https://api.amplitude.com/2,https://developers.amplitude.com,true,@rostr/mcp-amplitude
+Hotjar,Analytics,"Heatmaps, session recordings, feedback",api_key,https://api.hotjar.io,https://developer.hotjar.com,false,
+PostHog,Analytics,"Open-source analytics & feature flags",api_key,https://app.posthog.com,https://posthog.com/docs,true,@rostr/mcp-posthog
+Slack,Communication,"Team messaging & notifications",oauth,https://slack.com/api,https://api.slack.com,true,@rostr/mcp-slack
+Discord,Communication,"Server messaging & bots",webhook,https://discord.com/api/v10,https://discord.com/developers,true,@rostr/mcp-discord
+Twilio,Communication,"SMS, voice & WhatsApp messaging",api_key,https://api.twilio.com,https://www.twilio.com/docs,true,@rostr/mcp-twilio
+Telegram Bot,Communication,"Bot messaging & automation",api_key,https://api.telegram.org,https://core.telegram.org/bots,true,@rostr/mcp-telegram
+WhatsApp Business,Communication,"WhatsApp messaging API",oauth,https://graph.facebook.com/v18.0,https://developers.facebook.com/docs/whatsapp,true,@rostr/mcp-whatsapp
+Notion,Productivity,"Docs, wikis, project management",oauth,https://api.notion.com/v1,https://developers.notion.com,true,@rostr/mcp-notion
+Google Docs,Productivity,"Document creation & editing",oauth,https://docs.googleapis.com/v1,https://developers.google.com/docs,true,@rostr/mcp-google-docs
+Google Sheets,Productivity,"Spreadsheet creation & editing",oauth,https://sheets.googleapis.com/v4,https://developers.google.com/sheets,true,@rostr/mcp-google-sheets
+Google Calendar,Productivity,"Calendar events & scheduling",oauth,https://www.googleapis.com/calendar/v3,https://developers.google.com/calendar,true,@rostr/mcp-google-calendar
+Google Drive,Productivity,"File storage & sharing",oauth,https://www.googleapis.com/drive/v3,https://developers.google.com/drive,true,@rostr/mcp-google-drive
+Trello,Productivity,"Kanban project management",api_key,https://api.trello.com/1,https://developer.atlassian.com/cloud/trello,true,@rostr/mcp-trello
+Asana,Productivity,"Team project management",oauth,https://app.asana.com/api/1.0,https://developers.asana.com,true,@rostr/mcp-asana
+Airtable,Productivity,"Database-spreadsheet hybrid",oauth,https://api.airtable.com/v0,https://airtable.com/developers,true,@rostr/mcp-airtable
+Linear,Productivity,"Issue tracking & project management",oauth,https://api.linear.app/graphql,https://developers.linear.app,true,@rostr/mcp-linear
+Jira,Productivity,"Enterprise issue tracking",oauth,https://your-domain.atlassian.net/rest/api/3,https://developer.atlassian.com/cloud/jira,true,@rostr/mcp-jira
+ClickUp,Productivity,"All-in-one project management",api_key,https://api.clickup.com/api/v2,https://clickup.com/api,true,@rostr/mcp-clickup
+Todoist,Productivity,"Personal task management",oauth,https://api.todoist.com/rest/v2,https://developer.todoist.com,true,@rostr/mcp-todoist
+Obsidian,Productivity,"Knowledge & note-taking vault",none,obsidian://open,https://obsidian.md/plugins,true,@rostr/mcp-obsidian
+Stripe,Payments,"Payments, subscriptions, billing",api_key,https://api.stripe.com/v1,https://stripe.com/docs/api,true,@rostr/mcp-stripe
+Shopify,Payments,"E-commerce platform API",oauth,https://your-store.myshopify.com/admin/api,https://shopify.dev/docs/api,true,@rostr/mcp-shopify
+Square,Payments,"Payments & POS integration",oauth,https://connect.squareup.com/v2,https://developer.squareup.com,true,@rostr/mcp-square
+PayPal,Payments,"Payments & checkout",oauth,https://api-m.paypal.com/v1,https://developer.paypal.com,true,@rostr/mcp-paypal
+Gumroad,Payments,"Digital product sales",api_key,https://api.gumroad.com/v2,https://gumroad.com/api,false,
+Lemon Squeezy,Payments,"Payments for SaaS & digital",api_key,https://api.lemonsqueezy.com/v1,https://docs.lemonsqueezy.com/api,true,@rostr/mcp-lemonsqueezy
+OpenAI API,AI/ML,"GPT-4, Assistants, embeddings",api_key,https://api.openai.com/v1,https://platform.openai.com/docs,true,@rostr/mcp-openai
+Anthropic Claude,AI/ML,"Claude API, messages, thinking",api_key,https://api.anthropic.com/v1,https://docs.anthropic.com,true,@rostr/mcp-anthropic
+Hugging Face,AI/ML,"Open ML models & inference",api_key,https://api-inference.huggingface.co/models,https://huggingface.co/docs,true,@rostr/mcp-huggingface
+Replicate,AI/ML,"Run open-source AI models",api_key,https://api.replicate.com/v1,https://replicate.com/docs,true,@rostr/mcp-replicate
+ElevenLabs,AI/ML,"Text-to-speech & voice cloning",api_key,https://api.elevenlabs.io/v1,https://elevenlabs.io/docs,true,@rostr/mcp-elevenlabs
+Cohere,AI/ML,"Embeddings, generation, classification",api_key,https://api.cohere.com/v1,https://docs.cohere.com,true,@rostr/mcp-cohere
+Pinecone,AI/ML,"Vector database for embeddings",api_key,https://api.pinecone.io,https://docs.pinecone.io,true,@rostr/mcp-pinecone
+Weaviate,AI/ML,"Open-source vector database",api_key,https://your-instance.weaviate.cloud/v1,https://weaviate.io/developers,false,
+GitHub,Dev Tools,"Code, repos, issues, PRs, Actions",oauth,https://api.github.com,https://docs.github.com/rest,true,@rostr/mcp-github
+GitLab,Dev Tools,"DevOps, repos, CI/CD pipelines",oauth,https://gitlab.com/api/v4,https://docs.gitlab.com/ee/api,true,@rostr/mcp-gitlab
+Vercel,Dev Tools,"Deployments, domains, serverless",oauth,https://api.vercel.com,https://vercel.com/docs/rest-api,true,@rostr/mcp-vercel
+Netlify,Dev Tools,"Web deployments & serverless",oauth,https://api.netlify.com/v1,https://docs.netlify.com/api,true,@rostr/mcp-netlify
+Supabase,Dev Tools,"Database, auth, storage, realtime",api_key,https://api.supabase.com/v1,https://supabase.com/docs/reference,true,@rostr/mcp-supabase
+Firebase,Dev Tools,"Backend, auth, database, hosting",oauth,https://firebase.googleapis.com,https://firebase.google.com/docs,true,@rostr/mcp-firebase
+Datadog,Dev Tools,"Monitoring, logs, APM",api_key,https://api.datadoghq.com/api,https://docs.datadoghq.com/api,true,@rostr/mcp-datadog
+Sentry,Dev Tools,"Error tracking & performance",api_key,https://sentry.io/api/0,https://docs.sentry.io/api,true,@rostr/mcp-sentry
+Postman,Dev Tools,"API development & testing",api_key,https://api.getpostman.com,https://learning.postman.com,false,
+AWS S3,Storage,"Object storage",api_key,https://s3.amazonaws.com,https://docs.aws.amazon.com/s3,true,@rostr/mcp-aws-s3
+Google Cloud,Storage,"GCP services & storage",oauth,https://cloud.googleapis.com,https://cloud.google.com/apis,true,@rostr/mcp-google-cloud
+Dropbox,Storage,"Cloud file storage & sync",oauth,https://api.dropboxapi.com/2,https://www.dropbox.com/developers,true,@rostr/mcp-dropbox
+Box,Storage,"Enterprise content management",oauth,https://api.box.com/2.0,https://developer.box.com,false,
+Cloudflare,Storage,"CDN, DNS, security, workers",api_key,https://api.cloudflare.com/client/v4,https://developers.cloudflare.com,true,@rostr/mcp-cloudflare
+Spotify API,Music,"Music data, playlists, analytics",oauth,https://api.spotify.com/v1,https://developer.spotify.com,true,@rostr/mcp-spotify
+SoundCloud,Music,"Audio streaming & sharing",oauth,https://api.soundcloud.com,https://developers.soundcloud.com,false,
+Apple Music,Music,"Apple Music API & analytics",oauth,https://api.music.apple.com/v1,https://developer.apple.com/music,false,
+DistroKid,Music,"Music distribution API",api_key,https://api.distrokid.com,https://distrokid.com,false,
+TuneCore,Music,"Music distribution & publishing",api_key,https://api.tunecore.com,https://www.tunecore.com,false,
+Vimeo,Video,"Video hosting & API",oauth,https://api.vimeo.com,https://developer.vimeo.com,true,@rostr/mcp-vimeo
+Pexels,Video,"Free stock photos & videos",api_key,https://api.pexels.com/v1,https://www.pexels.com/api,true,@rostr/mcp-pexels
+Unsplash,Video,"Free stock photography",api_key,https://api.unsplash.com,https://unsplash.com/developers,true,@rostr/mcp-unsplash
+Google Maps,Location,"Maps, geocoding, places",api_key,https://maps.googleapis.com/maps/api,https://developers.google.com/maps,true,@rostr/mcp-google-maps
+Mapbox,Location,"Custom maps & location",api_key,https://api.mapbox.com,https://docs.mapbox.com/api,true,@rostr/mcp-mapbox
+Dropbox Sign,Legal,"E-signatures & contracts",oauth,https://api.hellosign.com/v3,https://developers.hellosign.com,true,@rostr/mcp-hellosign
+DocuSign,Legal,"E-signature platform",oauth,https://api.docusign.com/v2.1,https://developers.docusign.com,true,@rostr/mcp-docusign
+Stripe Tax,Legal,"Automated tax calculation",api_key,https://api.stripe.com/v1/tax,https://stripe.com/docs/tax,false,
+Calendly,Scheduling,"Scheduling & appointments",oauth,https://api.calendly.com,https://developer.calendly.com,true,@rostr/mcp-calendly
+Acuity Scheduling,Scheduling,"Appointment scheduling",api_key,https://acuityscheduling.com/api/v1,https://developers.acuityscheduling.com,false,
+Intercom,Support,"Customer messaging & support",oauth,https://api.intercom.io,https://developers.intercom.com,true,@rostr/mcp-intercom
+Zendesk,Support,"Customer support tickets",oauth,https://your-subdomain.zendesk.com/api/v2,https://developer.zendesk.com,true,@rostr/mcp-zendesk
+Freshdesk,Support,"Customer support platform",api_key,https://your-domain.freshdesk.com/api/v2,https://developers.freshdesk.com,true,@rostr/mcp-freshdesk
+Crisp,Support,"Live chat & support",api_key,https://api.crisp.chat/v1,https://docs.crisp.chat/api,true,@rostr/mcp-crisp
+Meetup,Community,"Events & groups API",oauth,https://api.meetup.com/gql,https://www.meetup.com/api,false,
+Eventbrite,Community,"Event management & tickets",oauth,https://www.eventbriteapi.com/v3,https://www.eventbrite.com/platform,true,@rostr/mcp-eventbrite
+Luma,Community,"Events & community platform",api_key,https://api.lu.ma,https://docs.lu.ma,false,
+Discourse,Community,"Open-source forum platform",api_key,https://your-forum.com,https://docs.discourse.org,true,@rostr/mcp-discourse
+Auth0,Identity,"Authentication & authorization",api_key,https://your-tenant.auth0.com/api/v2,https://auth0.com/docs/api,true,@rostr/mcp-auth0
+Clerk,Identity,"User management & auth",api_key,https://api.clerk.com/v1,https://clerk.com/docs,true,@rostr/mcp-clerk
+Magic,Identity,"Passwordless auth",api_key,https://api.magic.link/v1,https://magic.link/docs,false,
