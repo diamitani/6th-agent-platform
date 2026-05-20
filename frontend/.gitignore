@@ -1,2 +1,3 @@
 # See parent .gitignore
 # This file exists to ensure git tracks the directory
+.vercel

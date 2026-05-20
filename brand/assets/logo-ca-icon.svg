@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <defs>
+    <linearGradient id="cg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF6B00"/>
+      <stop offset="100%" stop-color="#E85D00"/>
+    </linearGradient>
+  </defs>
+  <!-- Orb glow -->
+  <circle cx="200" cy="200" r="160" fill="#FF6B00" opacity="0.04"/>
+  <!-- Hexagon frame -->
+  <path d="M200 30 L345 115 L345 285 L200 370 L55 285 L55 115 Z"
+        fill="none" stroke="url(#cg)" stroke-width="12" stroke-linejoin="round"/>
+  <!-- C -->
+  <path d="M160 140 C115 140 90 175 90 210 C90 245 115 280 160 280"
+        fill="none" stroke="#1A1A1A" stroke-width="24" stroke-linecap="round"/>
+  <!-- A -->
+  <path d="M200 140 L260 280 L200 240 M240 210 L200 210"
+        fill="none" stroke="#1A1A1A" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Orange accent bar -->
+  <line x1="160" y1="235" x2="225" y2="235" stroke="#FF6B00" stroke-width="6" stroke-linecap="round"/>
+</svg>
