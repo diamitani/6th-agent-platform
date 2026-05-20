@@ -1,0 +1,84 @@
+rostr_version: "1.0"
+agent:
+  id: "rostr-framework"
+  name: "Rostr Agent Framework"
+  description: "Open Source Agent Team Operating System with PAL, RAG DAL, NPAO, and Hub"
+  version: "0.1.0"
+  author: "Patrick Diamitani"
+  license: "MIT"
+
+framework:
+  pal: true  # Prompt Abstraction Layer
+  ragdal: true  # Dynamic Acquisition Layer
+  npao: true  # Navigate, Prioritize, Allocate, Orchestrate
+  hub: true  # Central platform and reference hub
+
+components:
+  - name: PAL
+    description: "Compiles human intent into precise agent instructions"
+    modules:
+      - rostr.pal.compiler
+      - rostr.pal.intent
+      - rostr.pal.context
+      - rostr.pal.router
+
+  - name: RAG DAL
+    description: "Hierarchical knowledge retrieval with 3-tier credibility"
+    modules:
+      - rostr.ragdal.pipeline
+      - rostr.ragdal.search
+      - rostr.ragdal.knowledge_base
+      - rostr.ragdal.tiers
+
+  - name: NPAO
+    description: "Task routing via 5D framework + priority scoring"
+    modules:
+      - rostr.npao.orchestrator
+      - rostr.npao.phases
+      - rostr.npao.prioritizer
+      - rostr.npao.allocator
+
+  - name: Hub
+    description: "Agent registry, state management, event bus"
+    modules:
+      - rostr.core.hub
+      - rostr.core.registry
+      - rostr.core.state
+      - rostr.core.events
+
+  - name: Agents
+    description: "Standard agent library"
+    modules:
+      - rostr.agents.builder
+      - rostr.agents.researcher
+
+tools:
+  - anthropic  # Required for PAL and agent execution
+  - httpx  # For web requests in RAG DAL
+  - beautifulsoup4  # For content extraction
+  - fastapi  # Optional for API deployment
+  - typer  # For CLI
+
+env_vars:
+  required:
+    - ANTHROPIC_API_KEY  # For Claude API access
+  optional:
+    - OPENAI_API_KEY  # For embeddings (future)
+    - SUPABASE_URL  # For vector storage (future)
+    - SUPABASE_KEY  # For vector storage (future)
+    - REDIS_URL  # For caching (future)
+
+exports:
+  - python_package  # pip install rostr-framework
+  - cli_tool  # rostr command-line tool
+  - github_repo  # Open source repository
+  - documentation  # Comprehensive docs
+
+repository:
+  url: "https://github.com/rostr-ai/rostr"
+  issues: "https://github.com/rostr-ai/rostr/issues"
+  discussions: "https://github.com/rostr-ai/rostr/discussions"
+
+community:
+  discord: "https://discord.gg/rostr"
+  twitter: "https://twitter.com/rostr_ai"

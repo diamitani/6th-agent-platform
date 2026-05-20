@@ -10,6 +10,17 @@
 ### Mission
 Make every team a champion team. 6thAgent is the extra man on your roster — the AI agent platform that comes off the bench, works harder than anyone, and makes the whole team better.
 
+### What We Are
+**Open Source Agent Team Operating System.** A unified architecture for production-grade multi-agent systems with phase-aware orchestration and persistent knowledge compounding.
+
+Powered by **ROSTR** (Runtime, Orchestration, State, Tools, Reference):
+- **PAL** — Prompt Abstraction Layer (natural language → compiled agent manifest)
+- **NPAO** — Navigate, Prioritize, Allocate, Orchestrate (5D phase taxonomy + 4D priority scoring)
+- **RAG DAL** — Dynamic Acquisition Layer (3-tier credibility-weighted retrieval)
+- **Rostr Hub** — Agent Operating System (multi-namespace persistent state)
+
+Driven by **FPE** — Finish. Process. Effective. Never skip a phase.
+
 ### Brand Personality
 | Trait | Expression |
 |-------|-----------|
@@ -25,7 +36,19 @@ Make every team a champion team. 6thAgent is the extra man on your roster — th
 | **Your sixth man.** | Primary — brand tagline |
 | **Extra man on the roster.** | Secondary — feature messaging |
 | **Hardest worker in the room.** | Internal culture |
-| **Champion's agent platform.** | Enterprise positioning |
+| **Open Source Agent Team OS** | Technical positioning |
+| **Prompt → Production in &lt;5 minutes** | Speed promise |
+| **Phase-aware orchestration. Knowledge that compounds.** | Differentiation |
+
+### ROSTR Framework Positioning
+| Concept | 6thAgent Implementation |
+|---------|----------------------|
+| **PAL** | Agent Builder compiles natural language → structured agent manifest |
+| **NPAO** | Dashboard canvas with 5D phase taxonomy + 4D priority scoring |
+| **RAG DAL** | Knowledge Base with 3-tier credibility-weighted retrieval |
+| **FPE** | Ralph Wiggums Loop — Finish, Process, Effective |
+| **5D Phases** | PreD → Design → Development → Deployment → Debugging |
+| **Reference Hub** | Multi-namespace persistent state (org/project/team/global) |
 
 ---
 
