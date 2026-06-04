@@ -87,6 +87,19 @@ services:
               count: all
               capabilities: [gpu]
 
+  # Signal CLI (for Signal channel integration)
+  signal-cli:
+    image: bbernhard/signal-cli-rest-api:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - MODE=json-rpc
+    volumes:
+      - signal_data:/home/.local/share/signal-cli
+    networks:
+      - 6th-agent-network
+    restart: unless-stopped
+
   # MinIO (S3-compatible storage)
   minio:
     image: minio/minio:latest
@@ -107,6 +120,7 @@ volumes:
   redis_data:
   ollama_data:
   minio_data:
+  signal_data:
 
 networks:
   6th-agent-network:

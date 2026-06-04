@@ -7,7 +7,7 @@ import { useAppStore } from "@/hooks/use-app-store"
 import {
   LayoutDashboard, Bot, PlusCircle, BookOpen, HardDrive, MessageSquare,
   Settings, Users, Library, Puzzle, ShoppingBag, ChevronLeft, Sparkles,
-  ChevronDown, Code, Cloud, Terminal, Compass, GitBranch,
+  ChevronDown, Code, Cloud, Terminal, Compass, GitBranch, Network, Globe, Key, Rocket,
 } from "lucide-react"
 import { useState } from "react"
 
@@ -29,6 +29,20 @@ const navGroups = [
       { href: "/dashboard/ide", label: "Mini IDE", icon: Code },
       { href: "/marketplace", label: "Marketplace", icon: ShoppingBag },
       { href: "/dashboard/knowledge", label: "Knowledge Base", icon: BookOpen },
+    ],
+  },
+  {
+    label: "Deploy",
+    items: [
+      { href: "/dashboard/setup", label: "One-Click Setup", icon: Rocket },
+      { href: "/dashboard/swarm", label: "Swarm Command", icon: Network },
+      { href: "/dashboard/cloud", label: "Cloud Manager", icon: Globe },
+    ],
+  },
+  {
+    label: "Configure",
+    items: [
+      { href: "/dashboard/byok", label: "BYOK Provider", icon: Key },
     ],
   },
   {
