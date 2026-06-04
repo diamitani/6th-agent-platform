@@ -4,9 +4,9 @@ import { useState, useEffect, useCallback } from "react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { apiFetch } from "@/lib/api"
 
 const AGENTS = [
   { id: "engineering", name: "Engineering Lead", color: "bg-blue-500", icon: "⚙️" },
@@ -33,33 +33,31 @@ export default function SwarmDashboard() {
   const [activeTab, setActiveTab] = useState("overview")
   const [vision, setVision] = useState("")
   const [workflowDesc, setWorkflowDesc] = useState("")
-  const [runs, setRuns] = useState([])
-  const [selectedRun, setSelectedRun] = useState(null)
-  const [taskGraph, setTaskGraph] = useState({})
-  const [workloads, setWorkloads] = useState({})
+  const [runs, setRuns] = useState<any[]>([])
+  const [selectedRun, setSelectedRun] = useState<any>(null)
+  const [taskGraph, setTaskGraph] = useState<Record<string, any>>({})
+  const [workloads, setWorkloads] = useState<Record<string, number>>({})
   const [loading, setLoading] = useState(false)
 
   const fetchRuns = useCallback(async () => {
     try {
-      const res = await fetch("http://localhost:8000/api/swarm/runs")
-      const data = await res.json()
+      const data = await apiFetch("/api/swarm/runs")
       setRuns(data)
     } catch (e) { console.error(e) }
   }, [])
 
   const fetchTaskGraph = useCallback(async () => {
     try {
-      const res = await fetch("http://localhost:8000/api/swarm/tasks")
-      setTaskGraph(await res.json())
+      const data = await apiFetch("/api/swarm/tasks")
+      setTaskGraph(data)
     } catch (e) { console.error(e) }
   }, [])
 
   const fetchWorkloads = useCallback(async () => {
-    const wl = {}
+    const wl: Record<string, number> = {}
     for (const agent of AGENTS) {
       try {
-        const res = await fetch(`http://localhost:8000/api/swarm/agents/${agent.id}/workload`)
-        const data = await res.json()
+        const data = await apiFetch(`/api/swarm/agents/${agent.id}/workload`)
         wl[agent.id] = data.workload || 0
       } catch (e) { wl[agent.id] = 0 }
     }
@@ -76,12 +74,10 @@ export default function SwarmDashboard() {
     if (!vision.trim()) return
     setLoading(true)
     try {
-      const res = await fetch("http://localhost:8000/api/swarm/run-vision", {
+      const result = await apiFetch("/api/swarm/run-vision", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ vision }),
       })
-      const result = await res.json()
       await fetchRuns()
       setSelectedRun(result.run_id)
       setActiveTab("runs")
@@ -93,9 +89,8 @@ export default function SwarmDashboard() {
     if (!workflowDesc.trim()) return
     setLoading(true)
     try {
-      await fetch("http://localhost:8000/api/swarm/workflow", {
+      await apiFetch("/api/swarm/workflow", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ description: workflowDesc }),
       })
       await fetchRuns()
@@ -104,10 +99,10 @@ export default function SwarmDashboard() {
     setLoading(false)
   }
 
-  const loadRun = async (runId) => {
+  const loadRun = async (runId: string) => {
     try {
-      const res = await fetch(`http://localhost:8000/api/swarm/runs/${runId}`)
-      setSelectedRun(await res.json())
+      const data = await apiFetch(`/api/swarm/runs/${runId}`)
+      setSelectedRun(data)
     } catch (e) { console.error(e) }
   }
 
@@ -277,7 +272,7 @@ export default function SwarmDashboard() {
                   <h3 className="font-bold mb-2">Run Details</h3>
                   {selectedRun.tasks && (
                     <div className="space-y-1.5">
-                      {Object.entries(selectedRun.tasks).map(([id, task]) => (
+                      {Object.entries(selectedRun.tasks).map(([id, task]: [string, any]) => (
                         <div key={id} className="flex items-center justify-between text-xs p-2 bg-secondary rounded">
                           <span>{task.title}</span>
                           <div className="flex gap-2">

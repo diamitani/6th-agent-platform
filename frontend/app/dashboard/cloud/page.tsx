@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { apiFetch } from "@/lib/api"
 
 const PROVIDERS = [
   {
@@ -33,13 +34,13 @@ const PROVIDERS = [
 
 export default function CloudDashboard() {
   const [activeTab, setActiveTab] = useState("overview")
-  const [instances, setInstances] = useState([])
-  const [pricing, setPricing] = useState([])
+  const [instances, setInstances] = useState<any[]>([])
+  const [pricing, setPricing] = useState<any[]>([])
   const [name, setName] = useState("my-6th-agent")
   const [region, setRegion] = useState("us-east-1")
   const [selectedProvider, setSelectedProvider] = useState("azure")
   const [deployScript, setDeployScript] = useState("")
-  const [affiliateLinks, setAffiliateLinks] = useState({})
+  const [affiliateLinks, setAffiliateLinks] = useState<Record<string, string>>({})
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState("")
 
@@ -52,30 +53,29 @@ export default function CloudDashboard() {
 
   const fetchInstances = async () => {
     try {
-      const res = await fetch("http://localhost:8000/api/cloud/instances")
-      setInstances(await res.json())
+      const data = await apiFetch("/api/cloud/instances")
+      setInstances(data)
     } catch (e) { console.error(e) }
   }
 
   const fetchPricing = async () => {
     try {
-      const res = await fetch("http://localhost:8000/api/cloud/pricing")
-      setPricing(await res.json())
+      const data = await apiFetch("/api/cloud/pricing")
+      setPricing(data)
     } catch (e) { console.error(e) }
   }
 
   const fetchDeployScript = async () => {
     try {
-      const res = await fetch("http://localhost:8000/api/cloud/deployment-script")
-      const data = await res.json()
+      const data = await apiFetch("/api/cloud/deployment-script")
       setDeployScript(data.script || "")
     } catch (e) { console.error(e) }
   }
 
   const fetchAffiliateLinks = async () => {
     try {
-      const res = await fetch("http://localhost:8000/api/cloud/affiliate-links")
-      setAffiliateLinks(await res.json())
+      const data = await apiFetch("/api/cloud/affiliate-links")
+      setAffiliateLinks(data)
     } catch (e) { console.error(e) }
   }
 
@@ -83,25 +83,22 @@ export default function CloudDashboard() {
     setLoading(true)
     setMessage("")
     try {
-      const res = await fetch("http://localhost:8000/api/cloud/provision", {
+      const result = await apiFetch("/api/cloud/provision", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ provider: selectedProvider, name, region, use_existing: true }),
       })
-      const result = await res.json()
       setMessage(`✅ Provisioned! Instance ID: ${result.instance_id}`)
       await fetchInstances()
-    } catch (e) {
+    } catch (e: any) {
       setMessage(`❌ Error: ${e.message}`)
     }
     setLoading(false)
   }
 
-  const handleTerminate = async (instanceId) => {
+  const handleTerminate = async (instanceId: string) => {
     try {
-      await fetch("http://localhost:8000/api/cloud/terminate", {
+      await apiFetch("/api/cloud/terminate", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ instance_id: instanceId }),
       })
       await fetchInstances()

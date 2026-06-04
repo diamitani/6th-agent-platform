@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Checkbox } from "@/components/ui/checkbox"
+import { apiFetch } from "@/lib/api"
 
 const CHANNEL_OPTIONS = [
   { id: "whatsapp", label: "WhatsApp", icon: "💬" },
@@ -26,13 +26,13 @@ export default function OneClickSetupPage() {
   const [provider, setProvider] = useState("azure")
   const [instanceName, setInstanceName] = useState("my-6th-agent")
   const [region, setRegion] = useState("us-east-1")
-  const [channels, setChannels] = useState([])
-  const [setupId, setSetupId] = useState(null)
-  const [status, setStatus] = useState(null)
+  const [channels, setChannels] = useState<string[]>([])
+  const [setupId, setSetupId] = useState<string | null>(null)
+  const [status, setStatus] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-  const [log, setLog] = useState([])
+  const [log, setLog] = useState<string[]>([])
 
-  const toggleChannel = (id) => {
+  const toggleChannel = (id: string) => {
     setChannels((prev) =>
       prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]
     )
@@ -44,9 +44,8 @@ export default function OneClickSetupPage() {
     setStep(5)
 
     try {
-      const res = await fetch("http://localhost:8000/api/setup/start", {
+      const data = await apiFetch("/api/setup/start", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           provider,
           name: instanceName,
@@ -54,14 +53,13 @@ export default function OneClickSetupPage() {
           channels,
         }),
       })
-      const data = await res.json()
       setSetupId(data.setup_id)
       setStatus(data.status)
 
       if (data.steps) {
-        setLog(data.steps.map((s) => `${s.status === "completed" ? "✅" : "❌"} ${s.description}`))
+        setLog(data.steps.map((s: any) => `${s.status === "completed" ? "✅" : "❌"} ${s.description}`))
       }
-    } catch (e) {
+    } catch (e: any) {
       setLog((prev) => [...prev, `❌ Error: ${e.message}`])
     }
     setLoading(false)
@@ -170,8 +168,7 @@ export default function OneClickSetupPage() {
                 <p className="text-sm mb-2">Free — bring your own server</p>
                 <Button variant="outline" className="w-full" onClick={async () => {
                   try {
-                    const res = await fetch("http://localhost:8000/api/cloud/deployment-script")
-                    const data = await res.json()
+                    const data = await apiFetch("/api/cloud/deployment-script")
                     await navigator.clipboard.writeText(data.script)
                     setLog(["📋 Deployment script copied to clipboard!", "SSH into your server and paste it."])
                     setStep(5)
@@ -204,14 +201,13 @@ export default function OneClickSetupPage() {
                     variant="outline"
                     size="sm"
                     className="w-full"
-                    onClick={async () => {
-                      try {
-                        const res = await fetch(`http://localhost:8000/api/cloud/guided-signup/${p.id}`)
-                        const data = await res.json()
-                        setLog(data.steps)
-                        window.open(data.signup_url, "_blank")
-                      } catch (e) { console.error(e) }
-                    }}
+                      onClick={async () => {
+                        try {
+                          const data = await apiFetch(`/api/cloud/guided-signup/${p.id}`)
+                          setLog(data.steps)
+                          window.open(data.signup_url, "_blank")
+                        } catch (e) { console.error(e) }
+                      }}
                   >
                     Free Sign Up with Affiliate
                   </Button>

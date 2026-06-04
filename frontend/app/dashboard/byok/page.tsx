@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { apiFetch } from "@/lib/api"
 
 const PROVIDER_ICONS = {
   ollama: "🆓",
@@ -17,10 +18,10 @@ const PROVIDER_ICONS = {
 }
 
 export default function BYOKPage() {
-  const [providers, setProviders] = useState([])
-  const [configs, setConfigs] = useState({})
+  const [providers, setProviders] = useState<any[]>([])
+  const [configs, setConfigs] = useState<Record<string, any>>({})
   const [selectedProvider, setSelectedProvider] = useState("ollama")
-  const [fieldValues, setFieldValues] = useState({})
+  const [fieldValues, setFieldValues] = useState<Record<string, string>>({})
   const [validationMsg, setValidationMsg] = useState("")
   const [loading, setLoading] = useState(false)
 
@@ -31,23 +32,23 @@ export default function BYOKPage() {
 
   const fetchProviders = async () => {
     try {
-      const res = await fetch("http://localhost:8000/api/byok/providers")
-      setProviders(await res.json())
+      const data = await apiFetch("/api/byok/providers")
+      setProviders(data)
     } catch (e) { console.error(e) }
   }
 
   const fetchConfigs = async () => {
     try {
-      const res = await fetch("http://localhost:8000/api/byok/config")
-      setConfigs(await res.json() || {})
+      const data = await apiFetch("/api/byok/config")
+      setConfigs(data || {})
     } catch (e) { console.error(e) }
   }
 
   const handleValidate = async () => {
-    const provider = providers.find(p => p.id === selectedProvider)
+    const provider = providers.find((p: any) => p.id === selectedProvider)
     if (!provider) return
 
-    const keyField = provider.fields.find(f => f.type === "password")
+    const keyField = provider.fields.find((f: any) => f.type === "password")
     if (!keyField || !fieldValues[keyField.key]) {
       setValidationMsg("Enter an API key to validate")
       return
@@ -55,14 +56,12 @@ export default function BYOKPage() {
 
     setLoading(true)
     try {
-      const res = await fetch("http://localhost:8000/api/byok/validate", {
+      const data = await apiFetch("/api/byok/validate", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ provider: selectedProvider, key: fieldValues[keyField.key] }),
       })
-      const data = await res.json()
       setValidationMsg(data.valid ? "✅ Key is valid!" : `❌ ${data.message}`)
-    } catch (e) {
+    } catch (e: any) {
       setValidationMsg(`❌ ${e.message}`)
     }
     setLoading(false)
@@ -71,20 +70,19 @@ export default function BYOKPage() {
   const handleSave = async () => {
     setLoading(true)
     try {
-      await fetch("http://localhost:8000/api/byok/save", {
+      await apiFetch("/api/byok/save", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ provider: selectedProvider, config: fieldValues }),
       })
       setValidationMsg("✅ Configuration saved!")
       await fetchConfigs()
-    } catch (e) {
+    } catch (e: any) {
       setValidationMsg(`❌ ${e.message}`)
     }
     setLoading(false)
   }
 
-  const currentProvider = providers.find(p => p.id === selectedProvider)
+  const currentProvider = providers.find((p: any) => p.id === selectedProvider)
 
   return (
     <div className="p-6 space-y-6">
@@ -101,23 +99,23 @@ export default function BYOKPage() {
 
       <Tabs value={selectedProvider} onValueChange={setSelectedProvider}>
         <TabsList className="flex-wrap">
-          {providers.map((p) => (
+          {providers.map((p: any) => (
             <TabsTrigger key={p.id} value={p.id} className="gap-1.5">
-              <span>{PROVIDER_ICONS[p.id] || "🔌"}</span>
+              <span>{PROVIDER_ICONS[p.id as keyof typeof PROVIDER_ICONS] || "🔌"}</span>
               <span>{p.label}</span>
               {configs[p.id] && <Badge variant="outline" className="ml-1 text-[10px]">✓</Badge>}
             </TabsTrigger>
           ))}
         </TabsList>
 
-        {providers.map((p) => (
+        {providers.map((p: any) => (
           <TabsContent key={p.id} value={p.id} className="mt-4">
             <Card>
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div>
                     <CardTitle className="flex items-center gap-2">
-                      <span>{PROVIDER_ICONS[p.id] || "🔌"}</span>
+                      <span>{PROVIDER_ICONS[p.id as keyof typeof PROVIDER_ICONS] || "🔌"}</span>
                       {p.label}
                     </CardTitle>
                     <CardDescription>{p.description}</CardDescription>
@@ -129,7 +127,7 @@ export default function BYOKPage() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
-                {p.fields?.map((field) => (
+                {p.fields?.map((field: any) => (
                   <div key={field.key}>
                     <label className="text-sm font-medium mb-1 block">{field.label}</label>
                     {field.type === "select" ? (
@@ -138,7 +136,7 @@ export default function BYOKPage() {
                         value={fieldValues[field.key] || field.default || ""}
                         onChange={(e) => setFieldValues({ ...fieldValues, [field.key]: e.target.value })}
                       >
-                        {field.options?.map((opt) => (
+                        {field.options?.map((opt: any) => (
                           <option key={opt} value={opt}>{opt}</option>
                         ))}
                       </select>
@@ -182,10 +180,10 @@ export default function BYOKPage() {
             <p className="text-sm text-muted-foreground">No providers configured yet. Select a provider above and save your API key.</p>
           ) : (
             <div className="flex flex-wrap gap-2">
-              {Object.entries(configs).map(([id, cfg]) => (
+              {Object.entries(configs).map(([id, cfg]: [string, any]) => (
                 <Badge key={id} variant="secondary" className="gap-1">
-                  <span>{PROVIDER_ICONS[id] || "🔌"}</span>
-                  {providers.find(p => p.id === id)?.label || id}
+                  <span>{PROVIDER_ICONS[id as keyof typeof PROVIDER_ICONS] || "🔌"}</span>
+                  {providers.find((p: any) => p.id === id)?.label || id}
                 </Badge>
               ))}
             </div>
