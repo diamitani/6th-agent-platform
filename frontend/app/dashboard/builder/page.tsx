@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { DashboardLayout } from "@/components/layout/DashboardLayout"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
@@ -8,9 +8,18 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { useAppStore } from "@/hooks/use-app-store"
-import { Sparkles, Bot, Zap, ArrowLeft, Check, Loader2, MessageSquare, Copy } from "lucide-react"
+import { Sparkles, Bot, Zap, ArrowLeft, Check, Loader2, MessageSquare, Copy, Puzzle } from "lucide-react"
 import Link from "next/link"
 import { AGENT_TEMPLATES } from "@/lib/pal/templates"
+
+interface Toolkit {
+  slug: string
+  name: string
+  category: string
+  description: string
+  logo?: string
+  tools_count?: number
+}
 
 export default function BuilderPage() {
   const addToast = useAppStore((s) => s.addToast)
@@ -19,6 +28,21 @@ export default function BuilderPage() {
   const [result, setResult] = useState<any>(null)
   const [step, setStep] = useState<"input" | "review" | "done">("input")
   const [saving, setSaving] = useState(false)
+  const [toolkits, setToolkits] = useState<Toolkit[]>([])
+  const [selectedTools, setSelectedTools] = useState<string[]>([])
+
+  useEffect(() => {
+    fetch("/api/composio?limit=24")
+      .then((r) => r.json())
+      .then((d) => setToolkits(d.items || []))
+      .catch(() => setToolkits([]))
+  }, [])
+
+  const toggleTool = (slug: string) => {
+    setSelectedTools((prev) =>
+      prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug]
+    )
+  }
 
   const handleCompile = async () => {
     if (!prompt.trim()) return
@@ -46,6 +70,12 @@ export default function BuilderPage() {
     setSaving(true)
     try {
       const m = result.manifest
+      const armedToolkits = toolkits.filter((t) => selectedTools.includes(t.slug))
+      const arsenalNote = armedToolkits.length
+        ? `\n\n## TOOL ARSENAL (via Composio)\nYou are equipped with these integrations: ${armedToolkits
+            .map((t) => `${t.name} (${t.slug})`)
+            .join(", ")}. Use them when a task requires acting in those systems.`
+        : ""
       const res = await fetch("/api/agents", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -55,8 +85,9 @@ export default function BuilderPage() {
           emoji: m.emoji,
           color: m.color,
           description: m.system_prompt?.split("\n")[0] || "",
-          system_prompt: m.system_prompt,
+          system_prompt: (m.system_prompt || "") + arsenalNote,
           triggers: m.triggers,
+          tools: selectedTools,
         }),
       })
       if (!res.ok) throw new Error("Failed to save agent")
@@ -182,6 +213,49 @@ export default function BuilderPage() {
                   <div className="rounded-xl bg-charcoal p-4 max-h-48 overflow-y-auto">
                     <pre className="text-xs text-green-400 font-mono whitespace-pre-wrap leading-relaxed">{result.manifest.system_prompt}</pre>
                   </div>
+                </div>
+
+                {/* Arsenal — Composio tool selection */}
+                <div>
+                  <div className="mb-2 flex items-center justify-between">
+                    <p className="text-xs font-semibold text-muted-foreground">
+                      ARM YOUR AGENT — INTEGRATIONS
+                    </p>
+                    <Badge variant="secondary" className="text-[10px] gap-1">
+                      <Puzzle className="h-3 w-3" /> Composio · {selectedTools.length} selected
+                    </Badge>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
+                    {toolkits.slice(0, 12).map((t) => {
+                      const selected = selectedTools.includes(t.slug)
+                      return (
+                        <button
+                          key={t.slug}
+                          type="button"
+                          onClick={() => toggleTool(t.slug)}
+                          className={`flex items-center gap-2 rounded-xl border px-3 py-2.5 text-left transition-all ${
+                            selected
+                              ? "border-[#FF6B00]/50 bg-[#FF6B00]/5 shadow-sm"
+                              : "border-border/40 bg-card hover:border-[#FF6B00]/25"
+                          }`}
+                        >
+                          {t.logo ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img src={t.logo} alt={t.name} className="h-4 w-4 shrink-0 rounded" />
+                          ) : (
+                            <Puzzle className="h-3.5 w-3.5 shrink-0 text-muted-foreground/50" />
+                          )}
+                          <span className="min-w-0 flex-1 truncate text-xs font-medium">{t.name}</span>
+                          {selected && <Check className="h-3.5 w-3.5 shrink-0 text-[#FF6B00]" />}
+                        </button>
+                      )
+                    })}
+                  </div>
+                  <p className="mt-2 text-[11px] text-muted-foreground">
+                    Connected accounts are managed in{" "}
+                    <Link href="/dashboard/integrations" className="text-[#FF6B00] hover:underline">Integrations</Link>.
+                    Your agent only acts through tools you arm it with.
+                  </p>
                 </div>
 
                 {/* PAL Details */}

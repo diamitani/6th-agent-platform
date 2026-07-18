@@ -50,7 +50,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const { name, role, emoji, color, description, system_prompt, triggers, team_id, template_id } = body
+    const { name, role, emoji, color, description, system_prompt, triggers, tools, team_id, template_id } = body
 
     if (!name || !role) {
       return NextResponse.json({ error: "name and role are required" }, { status: 400 })
@@ -95,23 +95,35 @@ export async function POST(req: NextRequest) {
       orgId = newOrg!.id
     }
 
-    const { data: agent, error } = await supabase
+    const baseRecord = {
+      org_id: orgId,
+      name,
+      role,
+      emoji: emoji || "🤖",
+      color: color || "#C0272D",
+      description,
+      system_prompt,
+      triggers: triggers || [],
+      team_id,
+      template_id,
+      ai_provider: "openai",
+    }
+
+    // Attempt to persist the Composio tool arsenal; retry without it when the
+    // deployed schema predates the tools column.
+    let { data: agent, error } = await supabase
       .from("agents")
-      .insert({
-        org_id: orgId,
-        name,
-        role,
-        emoji: emoji || "🤖",
-        color: color || "#C0272D",
-        description,
-        system_prompt,
-        triggers: triggers || [],
-        team_id,
-        template_id,
-        ai_provider: "openai",
-      })
+      .insert({ ...baseRecord, tools: tools || [] })
       .select()
       .single()
+
+    if (error && /tools/.test(error.message)) {
+      ;({ data: agent, error } = await supabase
+        .from("agents")
+        .insert(baseRecord)
+        .select()
+        .single())
+    }
 
     if (error) throw error
 

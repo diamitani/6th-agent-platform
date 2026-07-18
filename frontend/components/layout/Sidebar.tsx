@@ -8,6 +8,7 @@ import {
   LayoutDashboard, Bot, PlusCircle, BookOpen, HardDrive, MessageSquare,
   Settings, Users, Library, Puzzle, ShoppingBag, ChevronLeft, Sparkles,
   ChevronDown, Code, Cloud, Terminal, Compass, GitBranch, Network, Globe, Key, Rocket,
+  Crosshair,
 } from "lucide-react"
 import { useState } from "react"
 
@@ -15,6 +16,7 @@ const navGroups = [
   {
     label: "Workspace",
     items: [
+      { href: "/dashboard/command", label: "Command Center", icon: Crosshair },
       { href: "/dashboard", label: "NPAO Canvas", icon: LayoutDashboard },
       { href: "/dashboard/guide", label: "Workflow Guide", icon: Compass },
       { href: "/dashboard/agents", label: "Agent Roster", icon: Bot },
