@@ -90,13 +90,13 @@ export function Sidebar() {
         sidebarOpen ? "justify-between" : "justify-center"
       )}>
         {sidebarOpen && (
-          <Link href="/dashboard" className="flex items-center gap-2.5">
+          <Link href="/dashboard/command" className="flex items-center gap-2.5">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-gradient text-xs font-bold text-white shadow-lg shadow-primary/30">
-              RA
+              6A
             </div>
             <div>
-              <span className="font-heading text-base font-semibold">Rostr</span>
-              <p className="-mt-0.5 text-[10px] text-white/40 font-body">Agent Builder</p>
+              <span className="font-heading text-base font-semibold">Sixth Agent</span>
+              <p className="-mt-0.5 text-[10px] text-white/40 font-body">Command your roster</p>
             </div>
           </Link>
         )}

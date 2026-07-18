@@ -179,6 +179,13 @@ XS: 12px / 0.75rem
 3. **Athletic cadence**: Short sentences. Active voice. Period.
 4. **The Sixth Man**: Humbling. "We win as a team."
 
+### The Feel
+**Ball's in your court.** The user is the general of the army, the master of
+the ship. Sixth Agent hands them command — never complexity. Every screen
+should feel **easy, useful, powerful**: the operator gives the order, the
+platform executes, and the credit lands with the operator. Authority without
+intimidation; excellence without gender tilt; superior edge, zero jargon.
+
 ### Words We Use
 ```
 ship · iterate · win · team · roster · champion

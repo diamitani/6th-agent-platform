@@ -1,8 +1,10 @@
-# 6thAgent — Your Sixth Man
+# Sixth Agent — Your Sixth Man
 
 **The command center that builds your team.** An agent builder wrapping a Claude/Hermes agentic runtime, optimized by the ROSTR framework (PAL compiler, NPAO orchestration, Reference Hub) — with Composio-powered tool integrations, an S3-backed knowledge base on AWS, and a dashboard that feels like directing an operation, not writing prompts.
 
 > *"Your sixth man."* — The extra agent on your roster that changes the game.
+
+**The feel:** ball's in your court. General of the army, master of the ship — you give the order, the platform executes. Easy. Useful. Powerful.
 
 Built for the operator filling gaps with agents instead of headcount: the startup CEO, the solo founder, the small-team marketing leader, the new executive. Describe the outcome; PAL compiles the agent; Composio arms it; the Command Center shows your whole team at work.
 

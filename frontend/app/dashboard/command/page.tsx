@@ -183,7 +183,7 @@ export default function CommandCenterPage() {
                 </Badge>
               </div>
               <p className="mt-1.5 text-muted-foreground">
-                Your entire operation, one view. Direct the team — the runtime handles the rest.
+                Master of the ship. Every agent, every mission, one view — give the order and the runtime executes.
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-3">

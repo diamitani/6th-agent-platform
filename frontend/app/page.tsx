@@ -10,7 +10,7 @@ export default function LandingPage() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-[#E8E4DE] bg-[#FAF9F7]/90 backdrop-blur-lg">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <Link href="/" className="flex items-center gap-3">
-            <img src="/CA.png" alt="6thAgent" className="h-8 w-auto" />
+            <img src="/CA.png" alt="Sixth Agent" className="h-8 w-auto" />
           </Link>
           <div className="hidden items-center gap-6 md:flex">
             <a href="#how" className="text-sm text-[#4A4A4A] hover:text-[#1A1A1A] transition-colors">How it works</a>
@@ -30,24 +30,25 @@ export default function LandingPage() {
         <div className="mx-auto max-w-6xl px-6">
           <div className="mx-auto max-w-3xl text-center">
             <div className="mx-auto mb-6 inline-flex items-center gap-2 rounded-full bg-[#FF6B00]/5 border border-[#FF6B00]/10 px-4 py-1.5">
-              <span className="text-xs font-medium text-[#FF6B00]">Introducing 6thAgent</span>
+              <span className="text-xs font-medium text-[#FF6B00]">Introducing Sixth Agent</span>
             </div>
 
             <h1 className="font-['Georgia',serif] text-4xl font-bold leading-[1.15] text-[#1A1A1A] md:text-5xl lg:text-6xl tracking-tight">
-              Describe what you need.
+              Say the word.
               <br />
-              <span className="text-[#FF6B00]">Get a working agent.</span>
+              <span className="text-[#FF6B00]">Your team executes.</span>
             </h1>
 
             <p className="mx-auto mt-5 max-w-xl text-base md:text-lg text-[#6B6B6B] leading-relaxed">
-              Type what you want an agent to do — in plain English.
-              We build it. System prompt, triggers, behavior. Ready to talk.
+              Describe what you need in plain English. Sixth Agent builds the agent,
+              arms it with tools, and puts it on your roster — briefed, ready, reporting to you.
+              Ball&apos;s in your court.
             </p>
 
             <div className="mt-8 flex items-center justify-center gap-3">
               <Link href="/auth/signup">
                 <Button className="rounded-full bg-[#1A1A1A] text-white hover:bg-[#333] px-7 h-11 text-sm gap-2 shadow-lg">
-                  <Sparkles className="h-4 w-4" /> Build your first agent free
+                  <Sparkles className="h-4 w-4" /> Take command — free
                 </Button>
               </Link>
               <a href="#how">
@@ -73,7 +74,7 @@ export default function LandingPage() {
                   <div className="h-2.5 w-2.5 rounded-full bg-[#E8E4DE]" />
                   <div className="h-2.5 w-2.5 rounded-full bg-[#E8E4DE]" />
                 </div>
-                <span className="ml-3 text-xs text-[#8B8B8B] font-mono">6thAgent — Agent Builder</span>
+                <span className="ml-3 text-xs text-[#8B8B8B] font-mono">Sixth Agent — Command Center</span>
               </div>
               <div className="p-6 md:p-8">
                 <div className="flex items-center gap-2 mb-4">
@@ -281,12 +282,12 @@ export default function LandingPage() {
         <div className="mx-auto max-w-6xl px-6">
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             <div className="flex items-center gap-3">
-              <img src="/CA.png" alt="6thAgent" className="h-6 w-auto" />
+              <img src="/CA.png" alt="Sixth Agent" className="h-6 w-auto" />
             </div>
             <p className="text-sm text-[#8B8B8B]">
               Natural language in. Agent manifest out.
             </p>
-            <p className="text-xs text-[#A8A8A8]">&copy; 2026 6thAgent. Free to use. Open system.</p>
+            <p className="text-xs text-[#A8A8A8]">&copy; 2026 Sixth Agent. Free to use. Open system. Ball&apos;s in your court.</p>
           </div>
         </div>
       </footer>

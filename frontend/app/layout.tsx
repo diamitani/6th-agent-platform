@@ -3,12 +3,12 @@ import { Toaster } from "react-hot-toast"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "6thAgent — Build Your Agent Team",
-  description: "Build, deploy, and manage AI agent teams. ROSTR-powered orchestration with persistent memory, shared knowledge, and FPE iteration protocol.",
-  keywords: ["AI agents", "agent builder", "ROSTR", "FPE", "multi-agent", "AI team", "agent orchestration"],
+  title: "Sixth Agent — Command Your Agent Team",
+  description: "Say the word; your team executes. Build, arm, and command AI agent teams. ROSTR-powered orchestration with persistent memory, shared knowledge, and FPE iteration protocol.",
+  keywords: ["AI agents", "agent builder", "ROSTR", "FPE", "multi-agent", "AI team", "agent orchestration", "command center"],
   openGraph: {
-    title: "6thAgent — Build Your Agent Team",
-    description: "Multi-tenant AI agent platform with ROSTR architecture.",
+    title: "Sixth Agent — Command Your Agent Team",
+    description: "The command center that builds your team. Multi-tenant AI agent platform with ROSTR architecture.",
     type: "website",
   },
 }

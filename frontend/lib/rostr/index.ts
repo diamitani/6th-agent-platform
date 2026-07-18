@@ -250,7 +250,9 @@ export const FPE = {
 // ============================================================
 
 export const ROSTR_POSITIONING = {
+  name: "Sixth Agent",
   tagline: "Your sixth man.",
+  feel: "Ball's in your court. General of the army. Master of the ship. Easy. Useful. Powerful.",
   subtitle: "Open Source Agent Team Operating System",
   description:
     "A unified architecture for production-grade multi-agent systems with phase-aware orchestration and persistent knowledge compounding.",
