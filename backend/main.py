@@ -18,6 +18,7 @@ from api.routes import (
     integrations,
     workspaces,
     tasks,
+    runtime,
     swarm,
     channels,
     cloud_instances,
@@ -35,6 +36,9 @@ from rostr.channels.manager import ChannelManager
 from rostr.cloud.manager import CloudInstanceManager
 from rostr.setup.byok import BYOKManager
 from rostr.setup.one_click import OneClickSetup
+from rostr.integrations.composio_client import ComposioClient
+from rostr.knowledge.s3_store import S3KnowledgeStore
+from rostr.runtime.hermes import HermesRuntime
 
 # Load environment variables
 load_dotenv()
@@ -65,6 +69,25 @@ async def lifespan(app: FastAPI):
     app.state.pal_compiler = PALCompiler()
     app.state.ragdal_pipeline = RAGDALPipeline()
     app.state.npao_orchestrator = NPAOOrchestrator()
+
+    # Composio tool arsenal (live when COMPOSIO_API_KEY is set)
+    app.state.composio_client = ComposioClient()
+    logger.info(
+        f"🔌 Composio integrations: {'live' if app.state.composio_client.enabled else 'curated catalog (demo)'}"
+    )
+
+    # S3-backed Reference Hub knowledge base (live when ROSTR_KB_BUCKET is set)
+    app.state.knowledge_store = S3KnowledgeStore()
+    logger.info(
+        f"📚 Knowledge store: {'s3://' + app.state.knowledge_store.bucket if app.state.knowledge_store.enabled else 'not configured'}"
+    )
+
+    # Hermes runtime — Claude/Hermes agentic loop with Composio tool execution
+    app.state.hermes_runtime = HermesRuntime(
+        composio_client=app.state.composio_client,
+        knowledge_store=app.state.knowledge_store,
+    )
+    logger.info(f"⚡ Hermes runtime provider: {app.state.hermes_runtime.provider}")
 
     # Initialize Swarm, Channels, Cloud managers
     app.state.swarm_orchestrator = SwarmOrchestrator(
@@ -152,6 +175,7 @@ app.include_router(
 )
 app.include_router(workspaces.router, prefix="/api/workspaces", tags=["Workspaces"])
 app.include_router(tasks.router, prefix="/api/tasks", tags=["Tasks"])
+app.include_router(runtime.router, prefix="/api/runtime", tags=["Runtime"])
 app.include_router(swarm.router, prefix="/api/swarm", tags=["Swarm"])
 app.include_router(channels.router, prefix="/api/channels", tags=["Channels"])
 app.include_router(cloud_instances.router, prefix="/api/cloud", tags=["Cloud"])
@@ -169,8 +193,10 @@ async def root():
         "framework": {
             "PAL": "Prompt Abstraction Layer",
             "RAG_DAL": "Dynamic Acquisition Layer",
-            "NPAO": "Navigate, Prioritize, Allocate, Orchestrate",
+            "NPAO": "Necessity, Priority, Anxiety, Opportunity (N→A→P→O)",
             "Hub": "Agent OS & Reference Hub",
+            "Runtime": "Hermes runtime — Claude/Hermes agentic loop",
+            "Tools": "Composio integrations (300+ apps)",
         },
         "docs": "/docs",
         "health": "/health",
