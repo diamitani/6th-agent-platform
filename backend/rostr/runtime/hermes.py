@@ -7,10 +7,14 @@ agentic loop* behind the ROSTR runtime. This module is that wrapper:
     PAL manifest ──► HermesRuntime.run() ──► think → act (tool call) → observe
                                              loop until done or max turns
 
-Model providers (selected via env, first available wins):
+Model providers (first available wins):
 
-    1. Anthropic Claude       ANTHROPIC_API_KEY   (Claude Code-grade reasoning)
-    2. Open-source Hermes     via Ollama          (e.g. hermes3, deepseek-r1)
+    1. AWS Bedrock            platform credits    (Claude via Bedrock, metered)
+    2. Anthropic Claude       ANTHROPIC_API_KEY   (BYOK direct)
+    3. Open-source Hermes     via Ollama          (e.g. hermes3, deepseek-r1)
+
+Tenant runs are metered: every Bedrock call records token usage and cost,
+and deducts platform credits for tenants in credits mode.
 
 Tool execution is delegated to Composio (managed auth for 300+ apps), so any
 agent built in the platform can act on Gmail, HubSpot, Slack, GitHub, etc.
@@ -76,12 +80,16 @@ class HermesRuntime:
         self,
         composio_client=None,
         knowledge_store=None,
+        bedrock_client=None,
+        billing_meter=None,
         anthropic_api_key: Optional[str] = None,
         ollama_host: Optional[str] = None,
         hermes_model: Optional[str] = None,
     ):
         self.composio = composio_client
         self.knowledge_store = knowledge_store
+        self.bedrock = bedrock_client
+        self.billing = billing_meter
         self.anthropic_api_key = anthropic_api_key or os.getenv("ANTHROPIC_API_KEY")
         self.anthropic_model = os.getenv("ANTHROPIC_MODEL", "claude-sonnet-4-5")
         self.ollama_host = ollama_host or os.getenv("OLLAMA_HOST", "http://localhost:11434")
@@ -91,14 +99,37 @@ class HermesRuntime:
 
     @property
     def provider(self) -> str:
-        return "anthropic" if self.anthropic_api_key else "ollama-hermes"
+        if self.bedrock is not None and self.bedrock.enabled:
+            return "bedrock-credits"
+        if self.anthropic_api_key:
+            return "anthropic"
+        return "ollama-hermes"
 
     # -------------------------------------------------------------- LLM call
 
-    async def _complete(self, system: str, messages: list[dict]) -> str:
+    async def _complete(
+        self, system: str, messages: list[dict], meter: Optional[dict] = None
+    ) -> str:
+        if self.bedrock is not None and self.bedrock.enabled:
+            return await self._complete_bedrock(system, messages, meter)
         if self.anthropic_api_key:
             return await self._complete_anthropic(system, messages)
         return await self._complete_ollama(system, messages)
+
+    async def _complete_bedrock(
+        self, system: str, messages: list[dict], meter: Optional[dict] = None
+    ) -> str:
+        import asyncio
+
+        completion = await asyncio.to_thread(
+            self.bedrock.converse, system=system, messages=messages
+        )
+        if meter is not None:
+            meter["input_tokens"] = meter.get("input_tokens", 0) + completion.input_tokens
+            meter["output_tokens"] = meter.get("output_tokens", 0) + completion.output_tokens
+            meter["cost_usd"] = round(meter.get("cost_usd", 0.0) + completion.cost_usd, 6)
+            meter["model_id"] = completion.model_id
+        return completion.text
 
     async def _complete_anthropic(self, system: str, messages: list[dict]) -> str:
         async with httpx.AsyncClient(timeout=120) as client:
@@ -145,16 +176,21 @@ class HermesRuntime:
         user_id: str = "default",
         max_turns: int = MAX_TURNS_DEFAULT,
         on_event: Optional[Callable[[dict], Any]] = None,
+        tenant_id: Optional[str] = None,
+        billing_mode: str = "credits",
     ) -> AgentRunResult:
         """Execute one agent task through the think→act→observe loop.
 
         ``tools`` is a list of {slug, name, description} entries (typically
-        Composio tools attached to the agent at build time).
+        Composio tools attached to the agent at build time). When
+        ``tenant_id`` is set, Bedrock token usage is metered and credits
+        deducted per the tenant's billing mode.
         """
         run_id = str(uuid.uuid4())
         started = datetime.now(timezone.utc).isoformat()
         trace: list[dict] = []
         tools = tools or []
+        meter: dict = {}
 
         def emit(event: dict):
             event["timestamp"] = datetime.now(timezone.utc).isoformat()
@@ -178,7 +214,7 @@ class HermesRuntime:
         status, output, turn = "max_turns", "", 0
         for turn in range(1, max_turns + 1):
             try:
-                reply = await self._complete(system, messages)
+                reply = await self._complete(system, messages, meter)
             except Exception as e:
                 logger.error(f"Runtime completion failed (run {run_id}): {e}")
                 status, output = "failed", f"Model call failed: {e}"
@@ -212,6 +248,20 @@ class HermesRuntime:
         if status == "max_turns":
             output = output or "Run reached the maximum number of turns."
             emit({"type": "run_max_turns", "turns": max_turns})
+
+        # Meter tenant usage (Bedrock credits mode)
+        if tenant_id and self.billing is not None and meter.get("cost_usd"):
+            billed = self.billing.record_usage(
+                tenant_id=tenant_id,
+                agent_id=agent_id,
+                model_id=meter.get("model_id", ""),
+                input_tokens=meter.get("input_tokens", 0),
+                output_tokens=meter.get("output_tokens", 0),
+                cost_usd=meter["cost_usd"],
+                billing_mode=billing_mode,
+                run_id=run_id,
+            )
+            emit({"type": "usage_metered", **{k: v for k, v in meter.items()}, **billed})
 
         result = AgentRunResult(
             run_id=run_id,

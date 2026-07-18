@@ -19,6 +19,8 @@ from api.routes import (
     workspaces,
     tasks,
     runtime,
+    skills,
+    instances,
     swarm,
     channels,
     cloud_instances,
@@ -39,6 +41,9 @@ from rostr.setup.one_click import OneClickSetup
 from rostr.integrations.composio_client import ComposioClient
 from rostr.knowledge.s3_store import S3KnowledgeStore
 from rostr.runtime.hermes import HermesRuntime
+from rostr.llm.bedrock_client import BedrockClient
+from rostr.tenancy.provisioner import TenantProvisioner
+from rostr.tenancy.billing import BillingMeter
 
 # Load environment variables
 load_dotenv()
@@ -82,10 +87,25 @@ async def lifespan(app: FastAPI):
         f"📚 Knowledge store: {'s3://' + app.state.knowledge_store.bucket if app.state.knowledge_store.enabled else 'not configured'}"
     )
 
-    # Hermes runtime — Claude/Hermes agentic loop with Composio tool execution
+    # AWS Bedrock (platform credits provider) + tenant billing meter
+    app.state.bedrock_client = BedrockClient()
+    app.state.billing_meter = BillingMeter()
+    logger.info(
+        f"🏦 Bedrock credits provider: {'live' if app.state.bedrock_client.enabled else 'not configured'}"
+    )
+
+    # Tenant provisioner — one-stop company instance setup (S3 + DynamoDB)
+    app.state.tenant_provisioner = TenantProvisioner()
+    logger.info(
+        f"🏢 Tenant provisioner: {'live' if app.state.tenant_provisioner.enabled else 'AWS not configured'}"
+    )
+
+    # Hermes runtime — Bedrock/Claude/Hermes agentic loop with Composio tools
     app.state.hermes_runtime = HermesRuntime(
         composio_client=app.state.composio_client,
         knowledge_store=app.state.knowledge_store,
+        bedrock_client=app.state.bedrock_client,
+        billing_meter=app.state.billing_meter,
     )
     logger.info(f"⚡ Hermes runtime provider: {app.state.hermes_runtime.provider}")
 
@@ -176,6 +196,8 @@ app.include_router(
 app.include_router(workspaces.router, prefix="/api/workspaces", tags=["Workspaces"])
 app.include_router(tasks.router, prefix="/api/tasks", tags=["Tasks"])
 app.include_router(runtime.router, prefix="/api/runtime", tags=["Runtime"])
+app.include_router(skills.router, prefix="/api/skills", tags=["Skills"])
+app.include_router(instances.router, prefix="/api/instances", tags=["Instances"])
 app.include_router(swarm.router, prefix="/api/swarm", tags=["Swarm"])
 app.include_router(channels.router, prefix="/api/channels", tags=["Channels"])
 app.include_router(cloud_instances.router, prefix="/api/cloud", tags=["Cloud"])
