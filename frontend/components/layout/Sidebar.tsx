@@ -8,7 +8,7 @@ import {
   LayoutDashboard, Bot, PlusCircle, BookOpen, HardDrive, MessageSquare,
   Settings, Users, Library, Puzzle, ShoppingBag, ChevronLeft, Sparkles,
   ChevronDown, Code, Cloud, Terminal, Compass, GitBranch, Network, Globe, Key, Rocket,
-  Crosshair,
+  Crosshair, Wand2,
 } from "lucide-react"
 import { useState } from "react"
 
@@ -27,6 +27,7 @@ const navGroups = [
     label: "Build",
     items: [
       { href: "/dashboard/builder", label: "Agent Builder", icon: PlusCircle },
+      { href: "/dashboard/skills", label: "Skills", icon: Wand2 },
       { href: "/dashboard/canvas", label: "Visual Canvas", icon: GitBranch },
       { href: "/dashboard/ide", label: "Mini IDE", icon: Code },
       { href: "/marketplace", label: "Marketplace", icon: ShoppingBag },
