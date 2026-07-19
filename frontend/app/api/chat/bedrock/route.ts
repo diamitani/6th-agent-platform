@@ -45,20 +45,25 @@ export async function POST(req: NextRequest) {
             }
           }
         } finally {
-          controller.close()
-          // Meter after the stream completes
+          // Meter BEFORE closing the stream — Vercel freezes the function the
+          // moment the response ends, so an un-awaited write would be lost.
           if (session?.tenantId && (inputTokens || outputTokens)) {
             const [inPrice, outPrice] = modelPricing(BEDROCK_MODEL)
             const costUsd = (inputTokens * inPrice + outputTokens * outPrice) / 1_000_000
-            recordUsage({
-              tenantId: session.tenantId,
-              agentId: agentId || "chat",
-              modelId: BEDROCK_MODEL,
-              inputTokens,
-              outputTokens,
-              costUsd,
-            }).catch((e) => console.error("Metering failed:", e))
+            try {
+              await recordUsage({
+                tenantId: session.tenantId,
+                agentId: agentId || "chat",
+                modelId: BEDROCK_MODEL,
+                inputTokens,
+                outputTokens,
+                costUsd,
+              })
+            } catch (e) {
+              console.error("Metering failed:", e)
+            }
           }
+          controller.close()
         }
       },
     })
