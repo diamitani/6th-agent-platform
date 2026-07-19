@@ -1,38 +1,24 @@
 import { NextRequest, NextResponse } from "next/server"
-import { createServerClient } from "@supabase/ssr"
-import { cookies } from "next/headers"
+import { TEMPLATE_CATALOG } from "@/lib/templates/catalog"
+
+// Global agent template catalog — served from code (read-only product
+// content), no database dependency. AWS-only stack.
 
 export async function GET(req: NextRequest) {
-  try {
-    const cookieStore = await cookies()
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          getAll() { return cookieStore.getAll() },
-          setAll(cookiesToSet) {
-            try { cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options)) }
-            catch { /* ignore */ }
-          },
-        },
-      }
-    )
+  const category = req.nextUrl.searchParams.get("category")
+  const search = req.nextUrl.searchParams.get("search")?.toLowerCase()
 
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session?.user) {
-      return NextResponse.json({ template: null })
-    }
-
-    const { data: templates } = await supabase
-      .from("agent_templates")
-      .select("*")
-      .eq("is_public", true)
-      .order("use_count", { ascending: false })
-      .limit(50)
-
-    return NextResponse.json({ templates: templates || [] })
-  } catch (err) {
-    return NextResponse.json({ templates: [] })
+  let templates = TEMPLATE_CATALOG
+  if (category && category !== "All") {
+    templates = templates.filter((t) => t.category === category)
   }
+  if (search) {
+    templates = templates.filter(
+      (t) =>
+        t.name.toLowerCase().includes(search) ||
+        t.description?.toLowerCase().includes(search) ||
+        t.role.toLowerCase().includes(search)
+    )
+  }
+  return NextResponse.json({ templates })
 }

@@ -80,6 +80,25 @@ export default function IntegrationsPage() {
           <Badge variant="gold" className="gap-1.5 px-3 py-1.5 text-xs"><Zap className="h-3.5 w-3.5" /> {mcpCount} MCP Ready</Badge>
         </div>
 
+        {/* Live Composio connect — mints a fresh OAuth link on click (links expire in ~10 min) */}
+        <div className="command-card flex flex-wrap items-center gap-4 p-4">
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold">Connect a live account via Composio</p>
+            <p className="text-xs text-muted-foreground">
+              One click mints a fresh authorization link and sends you straight to the provider&apos;s consent screen.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {["gmail", "googlecalendar", "slack", "hubspot", "notion"].map((t) => (
+              <a key={t} href={`/api/composio/connect?toolkit=${t}`} target="_blank" rel="noopener noreferrer">
+                <Badge variant="secondary" className="cursor-pointer px-3 py-1.5 text-xs capitalize transition-colors hover:bg-primary/10 hover:text-primary">
+                  {t === "googlecalendar" ? "Calendar" : t}
+                </Badge>
+              </a>
+            ))}
+          </div>
+        </div>
+
         <div className="flex gap-3">
           <div className="relative flex-1">
             <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/60" />

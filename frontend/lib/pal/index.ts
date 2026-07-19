@@ -23,10 +23,12 @@ export interface RawIntent {
 export function extractIntent(raw: string): RawIntent {
   const lower = raw.toLowerCase()
   
-  // Domain detection
+  // Domain detection — order matters: specific signals before broad ones.
   const domainMap: [RegExp, RawIntent["domain"]][] = [
+    // Outreach/prospecting is sales even when it never says "sales"
+    [/\bdms?\b|direct message|outreach|prospect|cold (?:email|call|dm)|follow[- ]?ups?|touch (?:sequence|point)|\d+[- ]?touch|book (?:a )?(?:meeting|demo|call)|reply rate|hot leads?|quota/i, "sales"],
+    [/sales|convert|close|deal|pipeline|crm/i, "sales"],
     [/market|growth|campaign|channel|lead/i, "marketing"],
-    [/sales|convert|close|deal|pipeline/i, "sales"],
     [/operat|chief|staff|coordinat|manage/i, "operations"],
     [/content|write|copy|blog|post|email/i, "content"],
     [/research|competitiv|intel|analyz|data/i, "research"],
@@ -35,7 +37,7 @@ export function extractIntent(raw: string): RawIntent {
     [/legal|contract|complianc|review/i, "legal"],
     [/music|artist|release|dsp|playlist/i, "music"],
   ]
-  
+
   const domain = domainMap.find(([re]) => re.test(lower))?.[1] || "custom"
 
   // Extract subject (what's being acted upon)
@@ -139,11 +141,15 @@ export function enhanceIntent(intent: RawIntent & { context?: AgentContext }): E
     `Quality check passed`,
   ]
 
-  // Build trigger words from domain + subject
-  const triggers = [
-    intent.domain.charAt(0).toUpperCase() + intent.domain.slice(1),
-    ...intent.subject.split(/[\s,]+/).filter((w) => w.length > 3),
-  ].slice(0, 5)
+  // Build trigger words from domain + subject; outreach gets action triggers
+  const isOutreach =
+    intent.domain === "sales" && /\bdms?\b|direct message|outreach|prospect|follow[- ]?up|sequence/i.test(intent.raw)
+  const triggers = isOutreach
+    ? ["Outreach", "DM batch", "Follow-up", "Sequence"]
+    : [
+        intent.domain.charAt(0).toUpperCase() + intent.domain.slice(1),
+        ...intent.subject.split(/[\s,]+/).filter((w) => w.length > 3),
+      ].slice(0, 5)
 
   return {
     ...intent,
@@ -181,9 +187,9 @@ export function compileManifest(enhanced: EnhancedIntent): AgentManifest {
   }
 
   const domainColors: Record<string, string> = {
-    marketing: "#2563EB", sales: "#C0272D", operations: "#FF6B00",
+    marketing: "#2563EB", sales: "#C96442", operations: "#C96442",
     content: "#059669", research: "#7C3AED", support: "#0891B2",
-    finance: "#D97706", legal: "#4A4A4A", music: "#DB2777", custom: "#1A1A1A",
+    finance: "#D97706", legal: "#57564F", music: "#DB2777", custom: "#262624",
   }
 
   // Generate name from intent
@@ -196,7 +202,7 @@ export function compileManifest(enhanced: EnhancedIntent): AgentManifest {
     name,
     role: `${enhanced.domain.charAt(0).toUpperCase() + enhanced.domain.slice(1)} Agent`,
     emoji: domainEmojis[enhanced.domain] || "🤖",
-    color: domainColors[enhanced.domain] || "#FF6B00",
+    color: domainColors[enhanced.domain] || "#C96442",
     system_prompt: systemPrompt,
     triggers: enhanced.triggers,
     domain: enhanced.domain,
@@ -222,6 +228,13 @@ function generateAgentName(enhanced: EnhancedIntent): string {
   // Try to extract a name from the raw input
   const nameMatch = enhanced.raw.match(/(?:called|named|name is|name it)\s+["']?(\w+(?:\s+\w+)?)["']?/i)
   if (nameMatch) return nameMatch[1]
+
+  // Specialized sales flavors
+  if (enhanced.domain === "sales") {
+    if (/\bdms?\b|direct message/i.test(enhanced.raw)) return "DM Outreach Agent"
+    if (/cold (?:email|call)|outreach|prospect/i.test(enhanced.raw)) return "Outreach Agent"
+    if (/follow[- ]?up|pipeline|crm/i.test(enhanced.raw)) return "Pipeline Agent"
+  }
 
   return domainNames[enhanced.domain] || "Custom Agent"
 }

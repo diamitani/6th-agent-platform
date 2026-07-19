@@ -9,23 +9,10 @@ import { useAppStore } from "@/hooks/use-app-store"
 import { Search, ShoppingBag, Users, Zap, ArrowRight, Check, Sparkles } from "lucide-react"
 import Link from "next/link"
 import type { AgentTemplate } from "@/types"
+import { TEMPLATE_CATALOG, TEMPLATE_CATEGORIES } from "@/lib/templates/catalog"
 
-const TEMPLATES: AgentTemplate[] = [
-  { id: "t1", name: "Chief of Staff", role: "Orchestrator", emoji: "🎯", color: "#C0272D", description: "Runs NPAO triage, weekly reports, priority management", system_prompt: "You are the Chief of Staff.", triggers: ["Triage", "Status", "NPAO"], category: "Operations", is_public: true, use_count: 284, created_at: "" },
-  { id: "t2", name: "Marketing Manager", role: "Growth", emoji: "📊", color: "#2563EB", description: "Manages channels, campaigns, ICP targeting", triggers: ["Marketing", "Channels", "ICP"], category: "Marketing", is_public: true, use_count: 192, created_at: "" },
-  { id: "t3", name: "Content Writer", role: "Content", emoji: "✍️", color: "#059669", description: "Writes content drops, email sequences, copy", triggers: ["Content drop", "Email sequence"], category: "Content", is_public: true, use_count: 356, created_at: "" },
-  { id: "t4", name: "DM Agent", role: "Outreach", emoji: "💬", color: "#7C3AED", description: "Sends DMs, outreach sequences, follow-ups", triggers: ["DM batch", "Outreach"], category: "Sales", is_public: true, use_count: 145, created_at: "" },
-  { id: "t5", name: "Social Media", role: "Social", emoji: "📱", color: "#D97706", description: "Posts, content calendar, engagement", triggers: ["Social", "Post"], category: "Marketing", is_public: true, use_count: 267, created_at: "" },
-  { id: "t6", name: "Research Agent", role: "Research", emoji: "🔍", color: "#0891B2", description: "Competitive research, ICP analysis, market intel", triggers: ["Research", "Competitive"], category: "Operations", is_public: true, use_count: 412, created_at: "" },
-  { id: "t7", name: "Paid Ads Manager", role: "Advertising", emoji: "💰", color: "#65A30D", description: "Google/Facebook Ads, optimization", triggers: ["Ad copy", "Campaign"], category: "Marketing", is_public: true, use_count: 178, created_at: "" },
-  { id: "t8", name: "Sales Agent", role: "Sales", emoji: "🤝", color: "#C0272D", description: "Converts leads, founding member outreach", triggers: ["Sales", "Convert"], category: "Sales", is_public: true, use_count: 223, created_at: "" },
-  { id: "t9", name: "Builder Agent", role: "Dev", emoji: "🏗️", color: "#1A1A1A", description: "Ships features via FPE protocol & Ralph Wiggums Loop", triggers: ["Ship", "Build"], category: "Operations", is_public: true, use_count: 89, created_at: "" },
-  { id: "t10", name: "Customer Support", role: "Support", emoji: "🎧", color: "#059669", description: "Support tickets, FAQs, satisfaction", triggers: ["Support", "FAQ"], category: "Operations", is_public: true, use_count: 534, created_at: "" },
-  { id: "t11", name: "Music Promoter", role: "Music", emoji: "🎵", color: "#DB2777", description: "Release promotion, playlists, DSP analytics", triggers: ["Release", "Playlist"], category: "Music", is_public: true, use_count: 312, created_at: "" },
-  { id: "t12", name: "Financial Analyst", role: "Finance", emoji: "💎", color: "#D97706", description: "Financial planning, budgeting, forecasting", triggers: ["Finance", "Budget"], category: "Finance", is_public: true, use_count: 67, created_at: "" },
-]
-
-const CATEGORIES = ["All", "Marketing", "Sales", "Operations", "Content", "Music", "Legal", "Finance"]
+const TEMPLATES: AgentTemplate[] = TEMPLATE_CATALOG
+const CATEGORIES = TEMPLATE_CATEGORIES
 
 export default function MarketplacePage() {
   const addToast = useAppStore((s) => s.addToast)

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Lato:wght@300;400;700;900&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,28 +6,29 @@
 
 @layer base {
   :root {
-    --background: 39 33% 96%;
-    --foreground: 0 0% 10%;
+    /* Claude Code light — warm bone canvas, off-black ink, one clay accent */
+    --background: 48 23% 97%;
+    --foreground: 60 2% 16%;
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 10%;
+    --card-foreground: 60 2% 16%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 10%;
-    --primary: 358 67% 45%;
+    --popover-foreground: 60 2% 16%;
+    --primary: 15 54% 52%;
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 358 67% 38%;
-    --secondary: 39 33% 92%;
-    --secondary-foreground: 0 0% 10%;
-    --muted: 39 20% 90%;
-    --muted-foreground: 0 0% 45%;
-    --accent: 47 100% 48%;
-    --accent-foreground: 0 0% 10%;
-    --accent-hover: 47 100% 42%;
-    --destructive: 0 84% 60%;
+    --primary-hover: 15 54% 45%;
+    --secondary: 48 18% 93%;
+    --secondary-foreground: 60 2% 16%;
+    --muted: 48 14% 91%;
+    --muted-foreground: 45 3% 47%;
+    --accent: 15 54% 52%;
+    --accent-foreground: 0 0% 100%;
+    --accent-hover: 15 54% 45%;
+    --destructive: 4 60% 49%;
     --destructive-foreground: 0 0% 100%;
-    --border: 39 20% 85%;
-    --input: 39 20% 85%;
-    --ring: 358 67% 45%;
-    --radius: 0.75rem;
+    --border: 48 10% 88%;
+    --input: 48 10% 86%;
+    --ring: 15 54% 52%;
+    --radius: 0.625rem;
     --sidebar-w: 256px;
     --sidebar-collapsed-w: 64px;
   }
@@ -63,21 +64,21 @@
     text-wrap: balance;
   }
 
-  /* Brand Gradients */
+  /* Brand accent — flat clay, no gradient (taste: one accent, no AI-gradient) */
   .bg-brand-gradient {
-    background: linear-gradient(135deg, #C0272D 0%, #A31F24 100%);
+    background: #C96442;
   }
   .bg-brand-gradient-subtle {
-    background: linear-gradient(135deg, #C0272D08 0%, #F5C10008 100%);
+    background: linear-gradient(135deg, #C9644208 0%, #B0832408 100%);
   }
   .text-brand-gradient {
-    background: linear-gradient(135deg, #C0272D 0%, #F5C100 100%);
+    background: linear-gradient(135deg, #C96442 0%, #B08324 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
   .text-brand-gradient-reverse {
-    background: linear-gradient(135deg, #F5C100 0%, #C0272D 100%);
+    background: linear-gradient(135deg, #B08324 0%, #C96442 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -133,7 +134,7 @@
   .feature-card::before {
     content: '';
     @apply absolute inset-0 opacity-0 transition-opacity duration-300;
-    background: linear-gradient(135deg, #C0272D04 0%, #F5C10004 100%);
+    background: linear-gradient(135deg, #C9644204 0%, #B0832404 100%);
   }
   .feature-card:hover::before {
     @apply opacity-100;
@@ -155,10 +156,10 @@
     @apply absolute rounded-full blur-3xl opacity-20 pointer-events-none;
   }
   .orb-primary {
-    background: radial-gradient(circle, #C0272D 0%, transparent 70%);
+    background: radial-gradient(circle, #C96442 0%, transparent 70%);
   }
   .orb-gold {
-    background: radial-gradient(circle, #F5C100 0%, transparent 70%);
+    background: radial-gradient(circle, #B08324 0%, transparent 70%);
   }
 
   /* Gradient borders */
@@ -168,7 +169,7 @@
   .border-glow::after {
     content: '';
     @apply absolute inset-0 rounded-[inherit] p-[1px];
-    background: linear-gradient(135deg, #C0272D, #F5C100, #C0272D);
+    background: linear-gradient(135deg, #C96442, #B08324, #C96442);
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
@@ -183,16 +184,15 @@
     content: '';
     @apply absolute inset-0;
     background:
-      radial-gradient(ellipse 80% 60% at 50% -20%, rgba(192, 39, 45, 0.12) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(245, 193, 0, 0.06) 0%, transparent 50%);
+      radial-gradient(ellipse 80% 60% at 50% -20%, rgba(201, 100, 66, 0.07) 0%, transparent 60%);
     pointer-events: none;
   }
 
   /* Grid backgrounds */
   .grid-bg {
     background-image:
-      linear-gradient(rgba(192, 39, 45, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(192, 39, 45, 0.03) 1px, transparent 1px);
+      linear-gradient(rgba(38, 38, 36, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(38, 38, 36, 0.03) 1px, transparent 1px);
     background-size: 48px 48px;
   }
 
@@ -250,6 +250,48 @@
   .testimonial-card::before {
     content: '"';
     @apply absolute -top-3 left-6 font-heading text-6xl leading-none text-primary/10;
+  }
+
+  /* ============================================================
+     Command Center — light executive ops aesthetic
+     ============================================================ */
+  .command-grid-bg {
+    background-image:
+      linear-gradient(rgba(26, 26, 26, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26, 26, 26, 0.025) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  .command-card {
+    @apply rounded-2xl border border-border/50 bg-white/80 backdrop-blur-sm transition-all duration-300;
+    box-shadow: 0 1px 2px rgba(26, 26, 26, 0.03), 0 8px 24px rgba(26, 26, 26, 0.04);
+  }
+  .command-card:hover {
+    box-shadow: 0 2px 4px rgba(26, 26, 26, 0.04), 0 12px 32px rgba(255, 107, 0, 0.07);
+    @apply border-[#C96442]/20;
+  }
+  .status-dot {
+    @apply relative inline-flex h-2 w-2 rounded-full;
+  }
+  .status-dot::after {
+    content: '';
+    @apply absolute inset-0 rounded-full animate-ping opacity-60;
+    background: inherit;
+    animation-duration: 2.2s;
+  }
+  .mono-data {
+    font-family: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+    font-feature-settings: "tnum" 1;
+    letter-spacing: 0.02em;
+  }
+  .command-rail {
+    @apply absolute left-0 top-4 bottom-4 w-[3px] rounded-full;
+  }
+  @keyframes feedIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-feed-in {
+    animation: feedIn 0.35s ease-out forwards;
   }
 }
 

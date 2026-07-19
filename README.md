@@ -1,8 +1,12 @@
-# 6thAgent — Your Sixth Man
+# Sixth Agent — Your Sixth Man
 
-**Build, deploy, and manage AI agent teams.** ROSTR-powered orchestration with persistent memory, shared knowledge, visual canvas, FPE protocol, and zero vendor lock-in.
+**The command center that builds your team.** An agent builder wrapping a Claude/Hermes agentic runtime, optimized by the ROSTR framework (PAL compiler, NPAO orchestration, Reference Hub) — with Composio-powered tool integrations, an S3-backed knowledge base on AWS, and a dashboard that feels like directing an operation, not writing prompts.
 
 > *"Your sixth man."* — The extra agent on your roster that changes the game.
+
+**The feel:** ball's in your court. General of the army, master of the ship — you give the order, the platform executes. Easy. Useful. Powerful.
+
+Built for the operator filling gaps with agents instead of headcount: the startup CEO, the solo founder, the small-team marketing leader, the new executive. Describe the outcome; PAL compiles the agent; Composio arms it; the Command Center shows your whole team at work.
 
 [![GitHub](https://img.shields.io/badge/github-6thagent--platform-FF6B00?style=flat-square&logo=github)](https://github.com/diamitani/6th-agent-platform)
 [![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
@@ -52,7 +56,8 @@ cd frontend && npm install --legacy-peer-deps && npm run dev
 |---------|-------|--------|
 | Landing page | `/` | ✅ |
 | Auth (login/signup) | `/auth/*` | ✅ |
-| NPAO Command Center | `/dashboard` | ✅ |
+| **Command Center** (roster, NPAO mission queue, ops feed, arsenal) | `/dashboard/command` | ✅ |
+| NPAO Canvas | `/dashboard` | ✅ |
 | Agent Builder (3-step) | `/dashboard/builder` | ✅ |
 | Agent Roster | `/dashboard/agents` | ✅ |
 | Chat (Ollama ↔ Gemini toggle) | `/dashboard/chat` | ✅ |
@@ -95,9 +100,11 @@ cd frontend && npm install --legacy-peer-deps && npm run dev
 | Layer | Implementation |
 |-------|---------------|
 | **PAL** (Prompt Abstraction) | Agent Builder → system prompt compilation |
-| **NPAO** (Navigate-Prioritize-Allocate-Orchestrate) | Dashboard canvas, quick commands |
+| **NPAO** (Necessity → Anxiety → Priority → Opportunity) | Command Center mission queue + backend orchestrator (`/api/tasks`) |
 | **RAG DAL** (Retrieval Layer) | Knowledge Base → agent KB links |
-| **Reference Hub** | Org identity + ICP + positioning + timeline |
+| **Reference Hub** | Org identity + ICP + positioning + timeline; S3-backed namespaces (`docs/AWS_DEPLOYMENT.md`) |
+| **Hermes Runtime** | Claude/Hermes agentic loop with Composio tool execution (`/api/runtime`) |
+| **Tool Arsenal** | Composio integrations — 300+ apps with managed auth (`/api/integrations`) |
 | **FPE Loop** | Ralph Wiggums — Ship → Test → Fix → Repeat |
 
 ---

@@ -30,14 +30,14 @@ export interface CanvasWorkflow {
 }
 
 export const NODE_TYPES = [
-  { type: "trigger" as const, label: "Trigger", icon: "⚡", color: "#F5C100", description: "Starts the workflow" },
+  { type: "trigger" as const, label: "Trigger", icon: "⚡", color: "#B08324", description: "Starts the workflow" },
   { type: "llm" as const, label: "LLM Call", icon: "🧠", color: "#7C3AED", description: "Call an AI model" },
   { type: "action" as const, label: "Action", icon: "🔧", color: "#2563EB", description: "Perform an action" },
   { type: "condition" as const, label: "Condition", icon: "🔀", color: "#D97706", description: "Branch logic" },
   { type: "tool" as const, label: "Tool", icon: "🔌", color: "#059669", description: "Use an integration tool" },
   { type: "webhook" as const, label: "Webhook", icon: "🔄", color: "#0891B2", description: "HTTP webhook call" },
-  { type: "delay" as const, label: "Delay", icon: "⏱️", color: "#4A4A4A", description: "Wait before next step" },
-  { type: "output" as const, label: "Output", icon: "📤", color: "#C0272D", description: "Return result" },
+  { type: "delay" as const, label: "Delay", icon: "⏱️", color: "#57564F", description: "Wait before next step" },
+  { type: "output" as const, label: "Output", icon: "📤", color: "#C96442", description: "Return result" },
 ]
 
 export function createEmptyWorkflow(name: string): CanvasWorkflow {

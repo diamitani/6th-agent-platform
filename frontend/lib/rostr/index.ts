@@ -136,6 +136,55 @@ export function getPriorityColor(score: number): string {
 }
 
 // ============================================================
+// NPAO Classification — Necessity, Priority, Anxiety, Opportunity
+// (per the ROSTR paper, Section 6 — execution order N → A → P → O)
+// ============================================================
+
+export type NPAOClass = "necessity" | "anxiety" | "priority" | "opportunity"
+
+export const NPAO_EXECUTION_ORDER: NPAOClass[] = ["necessity", "anxiety", "priority", "opportunity"]
+
+export const NPAO_META: Record<NPAOClass, { label: string; signal: string; letter: string; color: string; description: string }> = {
+  necessity: {
+    label: "Necessity", signal: "I MUST", letter: "N", color: "#FF3B30",
+    description: "Hard blocker — nothing downstream proceeds until resolved.",
+  },
+  anxiety: {
+    label: "Anxiety", signal: "I WON'T HAVE PEACE", letter: "A", color: "#B08324",
+    description: "Cognitive friction — clear before Priority to protect execution quality.",
+  },
+  priority: {
+    label: "Priority", signal: "I NEED", letter: "P", color: "#C96442",
+    description: "Mission-critical forward motion. The primary workload.",
+  },
+  opportunity: {
+    label: "Opportunity", signal: "I CAN", letter: "O", color: "#34C759",
+    description: "Growth work — compounding, but never preempts anything.",
+  },
+}
+
+const NECESSITY_SIGNALS = ["must", "blocker", "blocked", "cannot proceed", "required before", "prerequisite", "outage", "down", "credentials", "api key", "auth", "compliance", "legal", "production"]
+const ANXIETY_SIGNALS = ["backlog", "overdue", "nagging", "cleanup", "clean up", "tech debt", "unresolved", "open loop", "peace", "worry", "lingering", "stale", "follow up", "follow-up"]
+const OPPORTUNITY_SIGNALS = ["could", "might", "experiment", "explore", "a/b test", "stretch", "nice to have", "growth", "upsell", "expand", "someday", "idea"]
+
+export function classifyNPAO(text: string): NPAOClass {
+  const t = text.toLowerCase()
+  if (NECESSITY_SIGNALS.some((s) => t.includes(s))) return "necessity"
+  if (ANXIETY_SIGNALS.some((s) => t.includes(s))) return "anxiety"
+  if (OPPORTUNITY_SIGNALS.some((s) => t.includes(s))) return "opportunity"
+  return "priority"
+}
+
+export interface Mission {
+  id: string
+  title: string
+  npao_class: NPAOClass
+  status: "queued" | "active" | "done"
+  assigned_agent?: string
+  created_at: string
+}
+
+// ============================================================
 // STAGE 3: RAG DAL — Dynamic Acquisition Layer
 // ============================================================
 
@@ -201,7 +250,9 @@ export const FPE = {
 // ============================================================
 
 export const ROSTR_POSITIONING = {
+  name: "Sixth Agent",
   tagline: "Your sixth man.",
+  feel: "Ball's in your court. General of the army. Master of the ship. Easy. Useful. Powerful.",
   subtitle: "Open Source Agent Team Operating System",
   description:
     "A unified architecture for production-grade multi-agent systems with phase-aware orchestration and persistent knowledge compounding.",

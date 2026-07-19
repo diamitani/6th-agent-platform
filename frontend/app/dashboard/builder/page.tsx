@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { DashboardLayout } from "@/components/layout/DashboardLayout"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
@@ -8,9 +8,18 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { useAppStore } from "@/hooks/use-app-store"
-import { Sparkles, Bot, Zap, ArrowLeft, Check, Loader2, MessageSquare, Copy } from "lucide-react"
+import { Sparkles, Bot, Zap, ArrowLeft, Check, Loader2, MessageSquare, Copy, Puzzle } from "lucide-react"
 import Link from "next/link"
 import { AGENT_TEMPLATES } from "@/lib/pal/templates"
+
+interface Toolkit {
+  slug: string
+  name: string
+  category: string
+  description: string
+  logo?: string
+  tools_count?: number
+}
 
 export default function BuilderPage() {
   const addToast = useAppStore((s) => s.addToast)
@@ -19,6 +28,21 @@ export default function BuilderPage() {
   const [result, setResult] = useState<any>(null)
   const [step, setStep] = useState<"input" | "review" | "done">("input")
   const [saving, setSaving] = useState(false)
+  const [toolkits, setToolkits] = useState<Toolkit[]>([])
+  const [selectedTools, setSelectedTools] = useState<string[]>([])
+
+  useEffect(() => {
+    fetch("/api/composio?limit=24")
+      .then((r) => r.json())
+      .then((d) => setToolkits(d.items || []))
+      .catch(() => setToolkits([]))
+  }, [])
+
+  const toggleTool = (slug: string) => {
+    setSelectedTools((prev) =>
+      prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug]
+    )
+  }
 
   const handleCompile = async () => {
     if (!prompt.trim()) return
@@ -46,6 +70,12 @@ export default function BuilderPage() {
     setSaving(true)
     try {
       const m = result.manifest
+      const armedToolkits = toolkits.filter((t) => selectedTools.includes(t.slug))
+      const arsenalNote = armedToolkits.length
+        ? `\n\n## TOOL ARSENAL (via Composio)\nYou are equipped with these integrations: ${armedToolkits
+            .map((t) => `${t.name} (${t.slug})`)
+            .join(", ")}. Use them when a task requires acting in those systems.`
+        : ""
       const res = await fetch("/api/agents", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -55,8 +85,9 @@ export default function BuilderPage() {
           emoji: m.emoji,
           color: m.color,
           description: m.system_prompt?.split("\n")[0] || "",
-          system_prompt: m.system_prompt,
+          system_prompt: (m.system_prompt || "") + arsenalNote,
           triggers: m.triggers,
+          tools: selectedTools,
         }),
       })
       if (!res.ok) throw new Error("Failed to save agent")
@@ -75,7 +106,7 @@ export default function BuilderPage() {
         {/* Header */}
         <div>
           <div className="flex items-center gap-3">
-            <Bot className="h-7 w-7 text-[#FF6B00]" />
+            <Bot className="h-7 w-7 text-[#C96442]" />
             <h1 className="font-heading text-3xl font-bold">Agent Builder</h1>
           </div>
           <p className="mt-1 text-muted-foreground">
@@ -91,7 +122,7 @@ export default function BuilderPage() {
                 <button key={t.id} onClick={() => {
                   setPrompt(`I need an agent for ${t.domain}: ${t.description}`)
                 }}
-                  className="flex items-center gap-2 rounded-xl border border-border/40 bg-card px-4 py-2.5 text-sm transition-all hover:border-[#FF6B00]/30 hover:shadow-sm">
+                  className="flex items-center gap-2 rounded-xl border border-border/40 bg-card px-4 py-2.5 text-sm transition-all hover:border-[#C96442]/30 hover:shadow-sm">
                   <span className="text-lg">{t.emoji}</span>
                   <span className="font-medium">{t.name}</span>
                   <Badge variant="secondary" className="text-[10px] ml-1">{t.category}</Badge>
@@ -100,10 +131,10 @@ export default function BuilderPage() {
             </div>
 
             {/* PAL Input */}
-            <Card className="border-t-4 border-t-[#FF6B00]/30">
+            <Card className="border-t-4 border-t-[#C96442]/30">
               <CardContent className="p-6 space-y-4">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Zap className="h-4 w-4 text-[#FF6B00]" />
+                  <Zap className="h-4 w-4 text-[#C96442]" />
                   PAL Stage 1: Describe what you need
                 </div>
                 <Textarea
@@ -117,7 +148,7 @@ export default function BuilderPage() {
                   <p className="text-xs text-muted-foreground">
                     PAL will extract: domain, constraints, triggers, output format, and cadence
                   </p>
-                  <Button onClick={handleCompile} disabled={!prompt.trim() || compiling} className="gap-2 shadow-lg shadow-[#FF6B00]/20">
+                  <Button onClick={handleCompile} disabled={!prompt.trim() || compiling} className="gap-2 shadow-lg shadow-[#C96442]/20">
                     {compiling ? (
                       <><Loader2 className="h-4 w-4 animate-spin" /> Compiling...</>
                     ) : (
@@ -132,7 +163,7 @@ export default function BuilderPage() {
             <div className="grid grid-cols-4 gap-3 text-center text-xs text-muted-foreground">
               {["Intent Extraction", "Context Injection", "Semantic Enhancement", "Runtime Compilation"].map((s, i) => (
                 <div key={s} className="rounded-lg bg-parchment-dark p-3">
-                  <div className="mx-auto mb-1 flex h-6 w-6 items-center justify-center rounded-full bg-[#FF6B00]/10 text-[10px] font-bold text-[#FF6B00]">{i + 1}</div>
+                  <div className="mx-auto mb-1 flex h-6 w-6 items-center justify-center rounded-full bg-[#C96442]/10 text-[10px] font-bold text-[#C96442]">{i + 1}</div>
                   <p className="font-medium text-charcoal">{s}</p>
                 </div>
               ))}
@@ -184,6 +215,49 @@ export default function BuilderPage() {
                   </div>
                 </div>
 
+                {/* Arsenal — Composio tool selection */}
+                <div>
+                  <div className="mb-2 flex items-center justify-between">
+                    <p className="text-xs font-semibold text-muted-foreground">
+                      ARM YOUR AGENT — INTEGRATIONS
+                    </p>
+                    <Badge variant="secondary" className="text-[10px] gap-1">
+                      <Puzzle className="h-3 w-3" /> Composio · {selectedTools.length} selected
+                    </Badge>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
+                    {toolkits.slice(0, 12).map((t) => {
+                      const selected = selectedTools.includes(t.slug)
+                      return (
+                        <button
+                          key={t.slug}
+                          type="button"
+                          onClick={() => toggleTool(t.slug)}
+                          className={`flex items-center gap-2 rounded-xl border px-3 py-2.5 text-left transition-all ${
+                            selected
+                              ? "border-[#C96442]/50 bg-[#C96442]/5 shadow-sm"
+                              : "border-border/40 bg-card hover:border-[#C96442]/25"
+                          }`}
+                        >
+                          {t.logo ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img src={t.logo} alt={t.name} className="h-4 w-4 shrink-0 rounded" />
+                          ) : (
+                            <Puzzle className="h-3.5 w-3.5 shrink-0 text-muted-foreground/50" />
+                          )}
+                          <span className="min-w-0 flex-1 truncate text-xs font-medium">{t.name}</span>
+                          {selected && <Check className="h-3.5 w-3.5 shrink-0 text-[#C96442]" />}
+                        </button>
+                      )
+                    })}
+                  </div>
+                  <p className="mt-2 text-[11px] text-muted-foreground">
+                    Connected accounts are managed in{" "}
+                    <Link href="/dashboard/integrations" className="text-[#C96442] hover:underline">Integrations</Link>.
+                    Your agent only acts through tools you arm it with.
+                  </p>
+                </div>
+
                 {/* PAL Details */}
                 {result.enhanced && (
                   <div className="grid grid-cols-3 gap-3 text-xs">
@@ -208,7 +282,7 @@ export default function BuilderPage() {
                   <Button variant="outline" onClick={() => { setStep("input"); setResult(null) }} className="gap-2">
                     <ArrowLeft className="h-4 w-4" /> Refine
                   </Button>
-                  <Button onClick={handleSave} disabled={saving} className="flex-1 gap-2 shadow-lg shadow-[#FF6B00]/20">
+                  <Button onClick={handleSave} disabled={saving} className="flex-1 gap-2 shadow-lg shadow-[#C96442]/20">
                     {saving ? <><Loader2 className="h-4 w-4 animate-spin" /> Saving...</> : <><Sparkles className="h-4 w-4" /> Add {result.manifest.emoji} {result.manifest.name} to Roster</>}
                   </Button>
                 </div>

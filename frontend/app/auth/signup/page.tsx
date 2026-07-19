@@ -3,7 +3,6 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { createClient } from "@/lib/supabase"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -21,34 +20,21 @@ export default function SignupPage() {
     setLoading(true)
     setError("")
 
-    const supabase = createClient()
-
-    const { data: authData, error: authError } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { data: { org_name: orgName } },
-    })
-
-    if (authError) {
-      setError(authError.message)
-      setLoading(false)
-      return
-    }
-
-    if (authData.user) {
-      await supabase.from("users").insert({ id: authData.user.id, email, tier: "free" })
-
-      const slug = orgName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")
-      await supabase.from("orgs").insert({
-        owner_id: authData.user.id,
-        name: orgName,
-        slug: `${slug}-${Date.now().toString(36)}`,
-        tier: "free",
+    try {
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, company: orgName }),
       })
-    }
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || "Signup failed")
 
-    router.push("/onboarding")
-    router.refresh()
+      router.push("/onboarding")
+      router.refresh()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Signup failed")
+      setLoading(false)
+    }
   }
 
   return (
@@ -56,15 +42,15 @@ export default function SignupPage() {
       <Card className="w-full max-w-md border-0 shadow-xl">
         <CardHeader className="text-center">
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-primary text-xl font-bold text-white">
-            RA
+            6A
           </div>
-          <CardTitle className="font-heading text-2xl">Create your account</CardTitle>
-          <CardDescription>Start building your AI agent team</CardDescription>
+          <CardTitle className="font-heading text-2xl">Take command</CardTitle>
+          <CardDescription>Your company instance spins up the moment you sign up</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSignup} className="space-y-4">
             <div>
-              <label className="mb-1 block text-sm font-medium text-charcoal-light">Organization name</label>
+              <label className="mb-1 block text-sm font-medium text-charcoal-light">Company name</label>
               <Input placeholder="Your company or brand" value={orgName} onChange={(e) => setOrgName(e.target.value)} required />
             </div>
             <div>
@@ -77,7 +63,7 @@ export default function SignupPage() {
             </div>
             {error && <p className="text-sm text-red-500">{error}</p>}
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Creating account..." : "Create account"}
+              {loading ? "Provisioning your instance..." : "Create account"}
             </Button>
           </form>
           <p className="mt-4 text-center text-sm text-muted-foreground">

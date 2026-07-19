@@ -41,6 +41,11 @@ supabase/.temp
 coverage/
 .nyc_output/
 
+# Python
+__pycache__/
+*.pyc
+.venv/
+
 # Misc
 *.pem
 .cache/

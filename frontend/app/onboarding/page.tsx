@@ -43,7 +43,8 @@ export default function OnboardingPage() {
       })
       if (!res.ok) throw new Error("Failed")
       addToast("🎉 Your agent team is ready!", "success")
-      router.push("/dashboard"); router.refresh()
+      // welcome=1 opens Sixy, the agent copilot, with the setup guide
+      router.push("/dashboard/command?welcome=1"); router.refresh()
     } catch { addToast("Onboarding failed", "error") }
     finally { setLoading(false) }
   }

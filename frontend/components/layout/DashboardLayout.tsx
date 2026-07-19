@@ -1,6 +1,8 @@
 "use client"
 
+import { Suspense } from "react"
 import { Sidebar } from "./Sidebar"
+import { SixyCopilot } from "@/components/sixy/SixyCopilot"
 import { useAppStore } from "@/hooks/use-app-store"
 import { cn } from "@/lib/utils"
 import { Toaster } from "react-hot-toast"
@@ -19,11 +21,14 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       >
         <div className="p-6 md:p-8">{children}</div>
       </main>
+      <Suspense fallback={null}>
+        <SixyCopilot />
+      </Suspense>
       <Toaster
         position="bottom-right"
         toastOptions={{
           style: {
-            background: "#1A1A1A",
+            background: "#262624",
             color: "#fff",
             fontFamily: "Lato, system-ui, sans-serif",
           },
