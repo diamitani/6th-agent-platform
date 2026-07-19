@@ -9,7 +9,7 @@ import { useAppStore } from "@/hooks/use-app-store"
 import { Send, Bot, User, Loader2, Sparkles, MessageSquare, ChevronRight, BookOpen, ExternalLink, Server, Zap, Cpu } from "lucide-react"
 import type { Agent } from "@/types"
 
-type AIProvider = "ollama" | "gemini"
+type AIProvider = "bedrock" | "ollama" | "gemini"
 type Message = { role: "user" | "assistant"; content: string }
 
 export default function ChatPage() {
@@ -20,7 +20,7 @@ export default function ChatPage() {
   const [input, setInput] = useState("")
   const [loading, setLoading] = useState(false)
   const [showGuide, setShowGuide] = useState(false)
-  const [provider, setProvider] = useState<AIProvider>("ollama")
+  const [provider, setProvider] = useState<AIProvider>("bedrock")
   const [ollamaRunning, setOllamaRunning] = useState<boolean | null>(null)
   const [providerSpeed, setProviderSpeed] = useState<"fast" | "moderate" | "slow">("slow")
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -36,12 +36,11 @@ export default function ChatPage() {
     try {
       const res = await fetch("http://localhost:11434/api/tags", { signal: AbortSignal.timeout(2000) })
       setOllamaRunning(res.ok)
-      if (res.ok) setProviderSpeed("moderate")
     } catch {
       setOllamaRunning(false)
-      setProvider("gemini")
-      setProviderSpeed("fast")
     }
+    // Bedrock stays the default — AWS credits, no local setup required
+    setProviderSpeed("fast")
   }
 
   const handleSend = async () => {
@@ -56,8 +55,11 @@ export default function ChatPage() {
         ? `You are ${selectedAgent.name}, ${selectedAgent.role}.\n\n${selectedAgent.system_prompt}`
         : undefined
 
-      // Route to provider
-      const endpoint = provider === "ollama" ? "/api/chat/ollama" : "/api/chat/gemini-stream"
+      // Route to provider — Bedrock (AWS credits) is the default
+      const endpoint =
+        provider === "bedrock" ? "/api/chat/bedrock"
+        : provider === "ollama" ? "/api/chat/ollama"
+        : "/api/chat/gemini-stream"
 
       const res = await fetch(endpoint, {
         method: "POST",
@@ -65,6 +67,7 @@ export default function ChatPage() {
         body: JSON.stringify({
           messages: [...messages.map((m) => ({ role: m.role, content: m.content })), { role: "user", content: userMsg }],
           systemPrompt: sysPrompt,
+          agentId: selectedAgent?.id,
         }),
       })
 
@@ -121,6 +124,13 @@ export default function ChatPage() {
           <div className="rounded-xl border border-border/40 bg-card p-3 space-y-2">
             <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60">AI Provider</p>
             <div className="flex gap-2">
+              <button onClick={() => setProvider("bedrock")}
+                className={`flex-1 flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium transition-all ${
+                  provider === "bedrock" ? "bg-primary text-white shadow-sm" : "bg-parchment-dark text-muted-foreground hover:bg-muted"
+                }`}>
+                <Server className="h-3.5 w-3.5" />
+                Bedrock
+              </button>
               <button onClick={() => setProvider("ollama")}
                 className={`flex-1 flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium transition-all ${
                   provider === "ollama" ? "bg-primary text-white shadow-sm" : "bg-parchment-dark text-muted-foreground hover:bg-muted"
@@ -138,6 +148,12 @@ export default function ChatPage() {
                 Gemini
               </button>
             </div>
+            {provider === "bedrock" && (
+              <p className="text-[10px] text-green-600 flex items-center gap-1">
+                <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
+                AWS • Claude • Included with your credits
+              </p>
+            )}
             {provider === "ollama" && ollamaRunning === true && (
               <p className="text-[10px] text-green-600 flex items-center gap-1">
                 <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
@@ -222,7 +238,7 @@ export default function ChatPage() {
                   <p className="text-xs text-muted-foreground">
                     {selectedAgent.role}
                     <span className="mx-1.5">·</span>
-                    {provider === "ollama" ? "Ollama (local)" : "Gemini (cloud)"}
+                    {provider === "bedrock" ? "Bedrock (AWS Claude)" : provider === "ollama" ? "Ollama (local)" : "Gemini (cloud)"}
                     {provider === "ollama" && <span className="ml-1.5 text-[10px] text-amber-500">slower</span>}
                   </p>
                 </div>
@@ -233,9 +249,9 @@ export default function ChatPage() {
                   <Sparkles className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="font-heading font-semibold">6thAgent Chat</p>
+                  <p className="font-heading font-semibold">Sixth Agent Chat</p>
                   <p className="text-xs text-muted-foreground">
-                    {provider === "ollama" ? "Ollama (free, local)" : "Gemini (cloud)"}
+                    {provider === "bedrock" ? "Bedrock (AWS Claude)" : provider === "ollama" ? "Ollama (free, local)" : "Gemini (cloud)"}
                     {provider === "ollama" && <span className="ml-1.5 text-amber-500 text-[10px]">⚠️ slower responses</span>}
                   </p>
                 </div>
@@ -291,10 +307,13 @@ export default function ChatPage() {
               <div className="relative flex-1">
                 <input
                   value={input} onChange={(e) => setInput(e.target.value)}
-                  placeholder={provider === "ollama" ? "Chat with Ollama (free, local, slower)..." : "Chat with Gemini (fast, cloud)..."}
+                  placeholder={provider === "bedrock" ? "Give the order..." : provider === "ollama" ? "Chat with Ollama (free, local, slower)..." : "Chat with Gemini (fast, cloud)..."}
                   disabled={loading}
                   className="input-field w-full pr-20"
                 />
+                {provider === "bedrock" && (
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-green-600 font-medium">⚡ AWS</span>
+                )}
                 {provider === "ollama" && (
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-amber-500 font-medium">🐢 local</span>
                 )}

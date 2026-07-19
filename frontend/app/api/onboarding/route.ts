@@ -1,91 +1,103 @@
 import { NextRequest, NextResponse } from "next/server"
-import { createServerClient } from "@supabase/ssr"
-import { cookies } from "next/headers"
+import { getSession } from "@/lib/aws/session"
+import { createAgent, writeTenantDoc } from "@/lib/aws/tenant"
+
+// Onboarding = PAL questionnaire -> org profile docs on S3 + starter agents
+// in DynamoDB. AWS-only — no Supabase.
+
+const STARTER_TEMPLATES: Record<
+  string,
+  { name: string; role: string; emoji: string; color: string; prompt: string; triggers: string[] }
+> = {
+  t1: {
+    name: "Chief of Staff", role: "Orchestrator", emoji: "🎯", color: "#FF6B00",
+    prompt: "You are the Chief of Staff. Run triage, priorities, and weekly reports. Classify every task NPAO (Necessity, Anxiety, Priority, Opportunity) and execute N->A->P->O.",
+    triggers: ["triage", "status", "priorities"],
+  },
+  t2: {
+    name: "Marketing Manager", role: "Growth", emoji: "📊", color: "#2563EB",
+    prompt: "You are the Marketing Manager. Own campaigns, channels, and CAC. Tie every recommendation to the org's ICP and stage.",
+    triggers: ["campaign", "channels", "cac"],
+  },
+  t3: {
+    name: "Content Writer", role: "Content", emoji: "✍️", color: "#DB2777",
+    prompt: "You are the Content Writer. Create content and copy in the org's voice: confident, helpful, concise. Verbs and outcomes over buzzwords.",
+    triggers: ["content", "draft", "copy"],
+  },
+  t5: {
+    name: "Social Media", role: "Social", emoji: "📱", color: "#7C3AED",
+    prompt: "You are the Social Media agent. Draft posts, captions, and engagement replies native to each channel's tone.",
+    triggers: ["post", "caption", "social"],
+  },
+  t6: {
+    name: "Research Agent", role: "Research", emoji: "🔍", color: "#059669",
+    prompt: "You are the Research Agent. Deliver market and competitive intelligence. Flag estimates as estimates; never invent data.",
+    triggers: ["research", "competitive", "market"],
+  },
+  t9: {
+    name: "Builder Agent", role: "Dev", emoji: "🏗️", color: "#EA580C",
+    prompt: "You are the Builder Agent. Ship product features. Finish. Process. Effective — production-ready output only.",
+    triggers: ["ship", "build", "launch"],
+  },
+}
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json()
-    const { orgName, industry, identity, icp, goal, selectedAgents } = body
-
-    if (!orgName) {
-      return NextResponse.json({ error: "orgName is required" }, { status: 400 })
-    }
-
-    const cookieStore = await cookies()
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          getAll() { return cookieStore.getAll() },
-          setAll(cookiesToSet) {
-            try { cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options)) }
-            catch { /* ignore */ }
-          },
-        },
-      }
-    )
-
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session?.user) {
+    const session = await getSession()
+    if (!session?.tenantId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const slug = orgName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") + "-" + Date.now().toString(36)
+    const { orgName, industry, identity, icp, goal, selectedAgents } = await req.json()
+    if (!orgName) {
+      return NextResponse.json({ error: "orgName is required" }, { status: 400 })
+    }
+    const tenantId = session.tenantId
 
-    const { data: org, error: orgError } = await supabase
-      .from("orgs")
-      .upsert({
-        owner_id: session.user.id,
-        name: orgName,
-        slug,
-        identity_md: identity || null,
-        icp_md: icp || null,
-        tier: "free",
-      })
-      .select()
-      .single()
+    // PAL stage: compile the questionnaire into org profile docs on S3
+    await Promise.all([
+      writeTenantDoc(
+        tenantId,
+        "identity.md",
+        `# ${orgName} — Identity\n\n## Who we are\n${identity || "(fill in)"}\n\n## Industry\n${industry || "(fill in)"}\n\n## Primary goal\n${goal || "(fill in)"}\n`
+      ),
+      writeTenantDoc(
+        tenantId,
+        "icp.md",
+        `# ${orgName} — Ideal Customer Profile\n\n${icp || "(fill in)"}\n\nRefine with the ICP Creator skill (Enably GTM pack).\n`
+      ),
+      writeTenantDoc(
+        tenantId,
+        "positioning.md",
+        `# ${orgName} — Positioning\n\nFor ${icp || "[target buyer]"} pursuing ${goal || "[goal]"}, ${orgName} delivers.\n\nVoice: confident, helpful, concise.\n`
+      ),
+    ])
 
-    if (orgError) throw orgError
-
-    // Create default team
-    const { data: team } = await supabase
-      .from("teams")
-      .insert({
-        org_id: org.id,
-        name: `${orgName} Core Team`,
-        description: "Your primary agent team",
-      })
-      .select()
-      .single()
-
-    // Clone selected templates as agents
-    if (selectedAgents && selectedAgents.length > 0) {
-      const { data: templates } = await supabase
-        .from("agent_templates")
-        .select("*")
-        .in("id", selectedAgents)
-
-      if (templates) {
-        for (const template of templates) {
-          await supabase.from("agents").insert({
-            org_id: org.id,
-            team_id: team?.id,
-            template_id: template.id,
-            name: template.name,
-            role: template.role,
-            emoji: template.emoji,
-            color: template.color,
-            description: template.description,
-            system_prompt: template.system_prompt,
-            triggers: template.triggers,
-            ai_provider: "openai",
-          })
-        }
-      }
+    // Starter roster in DynamoDB
+    const chosen: string[] = selectedAgents?.length ? selectedAgents : ["t1"]
+    const created = []
+    for (const id of chosen) {
+      const t = STARTER_TEMPLATES[id]
+      if (!t) continue
+      created.push(
+        await createAgent(tenantId, {
+          name: t.name,
+          role: t.role,
+          emoji: t.emoji,
+          color: t.color,
+          description: t.prompt.split(".")[0],
+          system_prompt: `${t.prompt}\n\nOrganization: ${orgName}. ICP: ${icp || "TBD"}. Goal: ${goal || "TBD"}.`,
+          triggers: t.triggers,
+          tools: [],
+        })
+      )
     }
 
-    return NextResponse.json({ org, team })
+    return NextResponse.json({
+      ok: true,
+      tenant_id: tenantId,
+      agents: created.map((a) => ({ ...a, id: a.agent_id })),
+    })
   } catch (err) {
     console.error("Onboarding error:", err)
     return NextResponse.json(

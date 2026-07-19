@@ -1,58 +1,52 @@
 import { NextRequest, NextResponse } from "next/server"
-import { createServerClient } from "@supabase/ssr"
-import { cookies } from "next/headers"
+import { PutCommand, QueryCommand } from "@aws-sdk/lib-dynamodb"
+import { PutObjectCommand } from "@aws-sdk/client-s3"
+import { ddb, s3 } from "@/lib/aws/clients"
+import { KNOWLEDGE_TABLE, TENANTS_BUCKET } from "@/lib/aws/config"
+import { getSession } from "@/lib/aws/session"
+
+// Knowledge base on AWS: document content in the tenant's S3 knowledge-base
+// namespace, metadata in DynamoDB. No Supabase.
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json()
-    const { title, doc_type, content, tags, namespace } = body
+    const session = await getSession()
+    if (!session?.tenantId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
 
+    const { title, doc_type, content, tags, namespace } = await req.json()
     if (!title || !content) {
       return NextResponse.json({ error: "title and content are required" }, { status: 400 })
     }
 
-    const cookieStore = await cookies()
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          getAll() { return cookieStore.getAll() },
-          setAll(cookiesToSet) {
-            try { cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options)) }
-            catch { /* ignore */ }
-          },
-        },
-      }
+    const tenantId = session.tenantId
+    const docId = `doc-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`
+    const s3Key = `tenants/${tenantId}/knowledge-base/${docId}.md`
+
+    await s3().send(
+      new PutObjectCommand({
+        Bucket: TENANTS_BUCKET,
+        Key: s3Key,
+        Body: content,
+        ContentType: "text/markdown",
+        Metadata: { title: encodeURIComponent(title) },
+      })
     )
 
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    const doc = {
+      tenant_id: tenantId,
+      doc_id: docId,
+      id: docId,
+      title,
+      doc_type: doc_type || "Research",
+      content: content.slice(0, 2000), // preview in DynamoDB; full text in S3
+      tags: tags || [],
+      namespace: namespace || `tenants/${tenantId}`,
+      s3_key: s3Key,
+      created_at: new Date().toISOString(),
     }
-
-    const { data: org } = await supabase
-      .from("orgs")
-      .select("id")
-      .eq("owner_id", session.user.id)
-      .single()
-
-    if (!org) return NextResponse.json({ error: "No org found" }, { status: 404 })
-
-    const { data: doc, error } = await supabase
-      .from("knowledge_docs")
-      .insert({
-        org_id: org.id,
-        title,
-        doc_type: doc_type || "Research",
-        content,
-        tags: tags || [],
-        namespace: namespace || `org/${org.id}`,
-      })
-      .select()
-      .single()
-
-    if (error) throw error
+    await ddb().send(new PutCommand({ TableName: KNOWLEDGE_TABLE, Item: doc }))
 
     return NextResponse.json({ doc })
   } catch (err) {
@@ -64,44 +58,23 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
-    const cookieStore = await cookies()
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          getAll() { return cookieStore.getAll() },
-          setAll(cookiesToSet) {
-            try { cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options)) }
-            catch { /* ignore */ }
-          },
-        },
-      }
+    const session = await getSession()
+    if (!session?.tenantId) return NextResponse.json({ docs: [] })
+
+    const resp = await ddb().send(
+      new QueryCommand({
+        TableName: KNOWLEDGE_TABLE,
+        KeyConditionExpression: "tenant_id = :t",
+        ExpressionAttributeValues: { ":t": session.tenantId },
+      })
     )
-
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session?.user) {
-      return NextResponse.json({ docs: [] })
-    }
-
-    const { data: org } = await supabase
-      .from("orgs")
-      .select("id")
-      .eq("owner_id", session.user.id)
-      .single()
-
-    if (!org) return NextResponse.json({ docs: [] })
-
-    const { data: docs } = await supabase
-      .from("knowledge_docs")
-      .select("*")
-      .eq("org_id", org.id)
-      .order("created_at", { ascending: false })
-
-    return NextResponse.json({ docs: docs || [] })
-  } catch (err) {
+    const docs = ((resp.Items as any[]) || []).sort((a, b) =>
+      String(b.created_at).localeCompare(String(a.created_at))
+    )
+    return NextResponse.json({ docs })
+  } catch {
     return NextResponse.json({ docs: [] })
   }
 }

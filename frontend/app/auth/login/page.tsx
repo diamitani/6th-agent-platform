@@ -3,7 +3,6 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { createClient } from "@/lib/supabase"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -20,20 +19,21 @@ export default function LoginPage() {
     setLoading(true)
     setError("")
 
-    const supabase = createClient()
-    const { error: authError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || "Login failed")
 
-    if (authError) {
-      setError(authError.message)
+      router.push("/dashboard/command")
+      router.refresh()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Login failed")
       setLoading(false)
-      return
     }
-
-    router.push("/dashboard")
-    router.refresh()
   }
 
   return (
@@ -41,10 +41,10 @@ export default function LoginPage() {
       <Card className="w-full max-w-md border-0 shadow-xl">
         <CardHeader className="text-center">
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-primary text-xl font-bold text-white">
-            RA
+            6A
           </div>
-          <CardTitle className="font-heading text-2xl">Welcome back</CardTitle>
-          <CardDescription>Sign in to your Rostr Agent Builder</CardDescription>
+          <CardTitle className="font-heading text-2xl">Welcome back, commander</CardTitle>
+          <CardDescription>Sign in to Sixth Agent</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">
