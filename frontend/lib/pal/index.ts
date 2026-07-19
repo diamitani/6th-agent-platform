@@ -187,9 +187,9 @@ export function compileManifest(enhanced: EnhancedIntent): AgentManifest {
   }
 
   const domainColors: Record<string, string> = {
-    marketing: "#2563EB", sales: "#C0272D", operations: "#FF6B00",
+    marketing: "#2563EB", sales: "#C96442", operations: "#C96442",
     content: "#059669", research: "#7C3AED", support: "#0891B2",
-    finance: "#D97706", legal: "#4A4A4A", music: "#DB2777", custom: "#1A1A1A",
+    finance: "#D97706", legal: "#57564F", music: "#DB2777", custom: "#262624",
   }
 
   // Generate name from intent
@@ -202,7 +202,7 @@ export function compileManifest(enhanced: EnhancedIntent): AgentManifest {
     name,
     role: `${enhanced.domain.charAt(0).toUpperCase() + enhanced.domain.slice(1)} Agent`,
     emoji: domainEmojis[enhanced.domain] || "🤖",
-    color: domainColors[enhanced.domain] || "#FF6B00",
+    color: domainColors[enhanced.domain] || "#C96442",
     system_prompt: systemPrompt,
     triggers: enhanced.triggers,
     domain: enhanced.domain,

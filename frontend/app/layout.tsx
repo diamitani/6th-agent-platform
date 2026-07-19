@@ -22,7 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="min-h-screen bg-parchment font-body antialiased">
         {children}
-        <Toaster position="bottom-right" toastOptions={{ style: { background: "#1A1A1A", color: "#fff", fontFamily: "Lato, system-ui, sans-serif" } }} />
+        <Toaster position="bottom-right" toastOptions={{ style: { background: "#262624", color: "#fff", fontFamily: "Lato, system-ui, sans-serif" } }} />
       </body>
     </html>
   )

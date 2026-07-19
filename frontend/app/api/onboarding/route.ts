@@ -10,7 +10,7 @@ const STARTER_TEMPLATES: Record<
   { name: string; role: string; emoji: string; color: string; prompt: string; triggers: string[] }
 > = {
   t1: {
-    name: "Chief of Staff", role: "Orchestrator", emoji: "🎯", color: "#FF6B00",
+    name: "Chief of Staff", role: "Orchestrator", emoji: "🎯", color: "#C96442",
     prompt: "You are the Chief of Staff. Run triage, priorities, and weekly reports. Classify every task NPAO (Necessity, Anxiety, Priority, Opportunity) and execute N->A->P->O.",
     triggers: ["triage", "status", "priorities"],
   },

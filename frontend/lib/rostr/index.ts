@@ -150,11 +150,11 @@ export const NPAO_META: Record<NPAOClass, { label: string; signal: string; lette
     description: "Hard blocker — nothing downstream proceeds until resolved.",
   },
   anxiety: {
-    label: "Anxiety", signal: "I WON'T HAVE PEACE", letter: "A", color: "#F5C100",
+    label: "Anxiety", signal: "I WON'T HAVE PEACE", letter: "A", color: "#B08324",
     description: "Cognitive friction — clear before Priority to protect execution quality.",
   },
   priority: {
-    label: "Priority", signal: "I NEED", letter: "P", color: "#FF6B00",
+    label: "Priority", signal: "I NEED", letter: "P", color: "#C96442",
     description: "Mission-critical forward motion. The primary workload.",
   },
   opportunity: {

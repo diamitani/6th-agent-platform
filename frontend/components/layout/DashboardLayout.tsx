@@ -28,7 +28,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
         position="bottom-right"
         toastOptions={{
           style: {
-            background: "#1A1A1A",
+            background: "#262624",
             color: "#fff",
             fontFamily: "Lato, system-ui, sans-serif",
           },

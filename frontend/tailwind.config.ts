@@ -20,22 +20,22 @@ const config: Config = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#C0272D",
+          DEFAULT: "#C96442",
           foreground: "#FFFFFF",
-          hover: "#A31F24",
+          hover: "#B0532F",
         },
         gold: {
-          DEFAULT: "#F5C100",
-          foreground: "#1A1A1A",
-          light: "#FFF3C4",
+          DEFAULT: "#B08324",
+          foreground: "#262624",
+          light: "#F4EBD7",
         },
         parchment: {
-          DEFAULT: "#F9F6EF",
-          dark: "#F0EBE0",
+          DEFAULT: "#FAF9F5",
+          dark: "#F0EEE7",
         },
         charcoal: {
-          DEFAULT: "#1A1A1A",
-          light: "#4A4A4A",
+          DEFAULT: "#262624",
+          light: "#57564F",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -62,10 +62,10 @@ const config: Config = {
           foreground: "hsl(var(--card-foreground))",
         },
         sidebar: {
-          DEFAULT: "#1A1A1A",
-          foreground: "#FFFFFF",
-          muted: "#2A2A2A",
-          active: "#C0272D",
+          DEFAULT: "#F5F4EE",
+          foreground: "#262624",
+          muted: "#EBE9E1",
+          active: "#C96442",
         },
       },
       borderRadius: {
@@ -74,8 +74,9 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        heading: ["Playfair Display", "Georgia", "serif"],
-        body: ["Lato", "system-ui", "sans-serif"],
+        heading: ["Newsreader", "Georgia", "serif"],
+        body: ["Outfit", "system-ui", "sans-serif"],
+        mono: ["JetBrains Mono", "SF Mono", "Menlo", "monospace"],
       },
       keyframes: {
         "accordion-down": {

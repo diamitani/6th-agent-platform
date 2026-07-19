@@ -309,9 +309,9 @@ Each script native to the channel's tone. No templates that smell like templates
 ]
 
 export const SKILL_CATEGORIES: Record<Skill["category"], { label: string; color: string }> = {
-  foundation: { label: "GTM Foundation", color: "#FF6B00" },
+  foundation: { label: "GTM Foundation", color: "#C96442" },
   messaging: { label: "Messaging", color: "#2563EB" },
-  playbook: { label: "Playbook", color: "#C0272D" },
+  playbook: { label: "Playbook", color: "#C96442" },
   research: { label: "Research", color: "#059669" },
 }
 

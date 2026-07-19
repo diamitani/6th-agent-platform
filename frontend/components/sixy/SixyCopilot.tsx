@@ -50,12 +50,12 @@ export function SixyCopilot() {
       <button
         onClick={() => setOpen((o) => !o)}
         aria-label="Open Sixy, your agent copilot"
-        className="fixed bottom-6 right-6 z-50 flex h-13 w-13 items-center justify-center rounded-2xl bg-charcoal p-3.5 text-white shadow-xl shadow-charcoal/20 transition-all hover:scale-105 hover:shadow-2xl"
+        className="fixed bottom-6 right-6 z-50 flex h-13 w-13 items-center justify-center rounded-2xl bg-primary p-3.5 text-white shadow-lg shadow-primary/25 transition-all hover:scale-105 active:scale-95"
       >
         {open ? (
           <X className="h-5 w-5" />
         ) : (
-          <span className="font-heading text-lg font-bold text-[#FF6B00]">6</span>
+          <span className="font-heading text-lg font-bold text-white">6</span>
         )}
       </button>
 
@@ -63,25 +63,25 @@ export function SixyCopilot() {
       {open && (
         <div className="animate-scale-in fixed bottom-24 right-6 z-50 flex max-h-[75vh] w-[22.5rem] flex-col overflow-hidden rounded-2xl border border-border/50 bg-white shadow-2xl shadow-charcoal/15">
           {/* Header */}
-          <div className="bg-charcoal p-5 text-white">
+          <div className="border-b border-border/60 bg-parchment-dark p-5">
             <div className="flex items-start gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#FF6B00] font-heading text-lg font-bold shadow-lg shadow-[#FF6B00]/30">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary font-heading text-lg font-bold text-white">
                 6
               </div>
               <div>
                 <p className="font-heading text-base font-bold leading-snug">
-                  Hi, I&apos;m Sixy! <span className="font-normal text-white/60">(and so are you ;)</span>
+                  Hi, I&apos;m Sixy! <span className="font-normal text-muted-foreground">(and so are you ;)</span>
                 </p>
-                <p className="mt-0.5 text-xs text-white/60">Your agent copilot. I can help you with:</p>
+                <p className="mt-0.5 text-xs text-muted-foreground">Your agent copilot. I can help you with:</p>
               </div>
             </div>
-            <div className="mt-4 flex gap-1 rounded-xl bg-white/10 p-1">
+            <div className="mt-4 flex gap-1 rounded-xl border border-border/60 bg-white p-1">
               {(["help", "setup"] as const).map((t) => (
                 <button
                   key={t}
                   onClick={() => setTab(t)}
                   className={`flex-1 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
-                    tab === t ? "bg-white text-charcoal shadow-sm" : "text-white/60 hover:text-white"
+                    tab === t ? "bg-charcoal text-white" : "text-muted-foreground hover:text-charcoal"
                   }`}
                 >
                   {t === "help" ? "What I do" : "Setup guide"}
@@ -98,12 +98,12 @@ export function SixyCopilot() {
                   key={c.label}
                   href={c.href}
                   onClick={() => setOpen(false)}
-                  className={`group flex items-center gap-3 rounded-xl border p-3 transition-all hover:border-[#FF6B00]/30 hover:shadow-sm ${
-                    pathname === c.href ? "border-[#FF6B00]/30 bg-[#FF6B00]/5" : "border-border/40"
+                  className={`group flex items-center gap-3 rounded-xl border p-3 transition-all hover:border-[#C96442]/30 hover:shadow-sm ${
+                    pathname === c.href ? "border-[#C96442]/30 bg-[#C96442]/5" : "border-border/40"
                   }`}
                 >
-                  <div className="rounded-lg bg-[#FF6B00]/8 p-2">
-                    <c.icon className="h-4 w-4 text-[#FF6B00]" />
+                  <div className="rounded-lg bg-[#C96442]/8 p-2">
+                    <c.icon className="h-4 w-4 text-[#C96442]" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-semibold leading-tight">{c.label}</p>
@@ -123,9 +123,9 @@ export function SixyCopilot() {
                     key={s.label}
                     href={s.href}
                     onClick={() => setOpen(false)}
-                    className="group flex items-center gap-3 rounded-xl border border-border/40 p-3 transition-all hover:border-[#FF6B00]/30 hover:shadow-sm"
+                    className="group flex items-center gap-3 rounded-xl border border-border/40 p-3 transition-all hover:border-[#C96442]/30 hover:shadow-sm"
                   >
-                    <span className="mono-data flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-charcoal text-xs font-bold text-[#FF6B00]">
+                    <span className="mono-data flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-xs font-bold text-primary">
                       {i + 1}
                     </span>
                     <p className="flex-1 text-sm font-semibold">{s.label}</p>

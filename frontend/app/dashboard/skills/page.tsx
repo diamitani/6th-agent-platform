@@ -71,7 +71,7 @@ export default function SkillsPage() {
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <Wand2 className="h-7 w-7 text-[#FF6B00]" />
+              <Wand2 className="h-7 w-7 text-[#C96442]" />
               <h1 className="font-heading text-3xl font-bold">Skills</h1>
               <Badge variant="gold" className="text-[10px] font-semibold uppercase tracking-widest">
                 Enably GTM Pack
@@ -181,7 +181,7 @@ export default function SkillsPage() {
                   <div key={input.id} className="space-y-1.5">
                     <label className="text-sm font-medium">
                       {input.label}
-                      {input.required && <span className="ml-1 text-[#FF6B00]">*</span>}
+                      {input.required && <span className="ml-1 text-[#C96442]">*</span>}
                     </label>
                     {input.multiline ? (
                       <Textarea
@@ -201,7 +201,7 @@ export default function SkillsPage() {
                   </div>
                 ))}
 
-                <Button onClick={runSkill} disabled={!canRun || running} className="w-full gap-2 shadow-lg shadow-[#FF6B00]/20">
+                <Button onClick={runSkill} disabled={!canRun || running} className="w-full gap-2 shadow-lg shadow-[#C96442]/20">
                   {running ? (
                     <><Loader2 className="h-4 w-4 animate-spin" /> Running skill…</>
                   ) : (

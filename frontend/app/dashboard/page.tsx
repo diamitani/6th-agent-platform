@@ -14,9 +14,9 @@ import {
 } from "@/lib/rostr"
 
 const stats = [
-  { label: "Active Agents", value: "0", icon: Bot, color: "#FF6B00", change: "+0 this week" },
+  { label: "Active Agents", value: "0", icon: Bot, color: "#C96442", change: "+0 this week" },
   { label: "Chat Threads", value: "0", icon: MessageSquare, color: "#2563EB", change: "+0 today" },
-  { label: "Knowledge Docs", value: "0", icon: BookOpen, color: "#F5C100", change: "0 added" },
+  { label: "Knowledge Docs", value: "0", icon: BookOpen, color: "#B08324", change: "0 added" },
   { label: "Tasks Completed", value: "0", icon: TrendingUp, color: "#059669", change: "this week" },
 ]
 
@@ -80,7 +80,7 @@ export default function DashboardPage() {
           <Card className="lg:col-span-2">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-xl">
-                <Target className="h-5 w-5 text-[#FF6B00]" />
+                <Target className="h-5 w-5 text-[#C96442]" />
                 5D Phase Taxonomy
               </CardTitle>
               <CardDescription>Phase-aware orchestration — gate enforcement prevents skipping research</CardDescription>
@@ -92,7 +92,7 @@ export default function DashboardPage() {
                   return (
                     <button key={phase.id} onClick={() => setActivePhase(phase.id)}
                       className={`w-full rounded-xl border p-4 text-left transition-all ${
-                        isActive ? "border-[#FF6B00]/40 bg-[#FF6B00]/5 shadow-sm" : "border-border/40 hover:shadow-sm"
+                        isActive ? "border-[#C96442]/40 bg-[#C96442]/5 shadow-sm" : "border-border/40 hover:shadow-sm"
                       }`}>
                       <div className="flex items-center gap-3">
                         <div className={`w-2 h-10 rounded-full ${getPriorityColor(phase.score)}`} />
@@ -112,8 +112,8 @@ export default function DashboardPage() {
                 })}
               </div>
               {active && (
-                <div className="mt-4 rounded-xl bg-[#FF6B00]/5 border border-[#FF6B00]/20 p-4 text-sm">
-                  <p className="font-semibold text-[#FF6B00]">Current Phase: {PHASE_LABELS[active.id]}</p>
+                <div className="mt-4 rounded-xl bg-[#C96442]/5 border border-[#C96442]/20 p-4 text-sm">
+                  <p className="font-semibold text-[#C96442]">Current Phase: {PHASE_LABELS[active.id]}</p>
                   <p className="text-xs text-muted-foreground mt-1">Priority Score: {active.score.toFixed(1)} — {getPriorityLabel(active.score)}</p>
                 </div>
               )}
@@ -125,14 +125,14 @@ export default function DashboardPage() {
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-lg">
-                  <Zap className="h-5 w-5 text-[#FF6B00]" />
+                  <Zap className="h-5 w-5 text-[#C96442]" />
                   Quick Commands
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
                   {[
-                    { trigger: "/triage", desc: "Run NPAO triage — check all agents", color: "border-[#FF6B00]/20 bg-[#FF6B00]/5" },
+                    { trigger: "/triage", desc: "Run NPAO triage — check all agents", color: "border-[#C96442]/20 bg-[#C96442]/5" },
                     { trigger: "/status", desc: "Full weekly report", color: "border-blue-500/20 bg-blue-500/5" },
                     { trigger: "/ship", desc: "Enter FPE loop — ship, test, fix", color: "border-green-500/20 bg-green-500/5" },
                     { trigger: "/research", desc: "Launch RAG DAL investigation", color: "border-purple-500/20 bg-purple-500/5" },

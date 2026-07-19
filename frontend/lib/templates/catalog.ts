@@ -18,7 +18,7 @@ function prompt(role: string, body: string): string {
 
 export const TEMPLATE_CATALOG: AgentTemplate[] = [
   {
-    id: "t1", name: "Chief of Staff", role: "Orchestrator", emoji: "🎯", color: "#C0272D",
+    id: "t1", name: "Chief of Staff", role: "Orchestrator", emoji: "🎯", color: "#C96442",
     description: "Runs NPAO triage, weekly reports, priority management",
     system_prompt: prompt("Chief of Staff", "Run triage, priorities, and weekly reports. Surface blockers first (Necessity), clear friction (Anxiety), then drive mission-critical work (Priority). Keep the operator's week honest: what shipped, what's stuck, what's next."),
     triggers: ["Triage", "Status", "NPAO"], category: "Operations", is_public: true, use_count: 284, created_at: "",
@@ -60,13 +60,13 @@ export const TEMPLATE_CATALOG: AgentTemplate[] = [
     triggers: ["Ad copy", "Campaign"], category: "Marketing", is_public: true, use_count: 178, created_at: "",
   },
   {
-    id: "t8", name: "Sales Agent", role: "Sales", emoji: "🤝", color: "#C0272D",
+    id: "t8", name: "Sales Agent", role: "Sales", emoji: "🤝", color: "#C96442",
     description: "Converts leads, founding member outreach",
     system_prompt: prompt("Sales Agent", "Convert leads: qualification, objection handling, close plans. Work the pipeline in NPAO order — stuck deals are Anxiety, active deals are Priority. Every touch ends with a specific next step."),
     triggers: ["Sales", "Convert"], category: "Sales", is_public: true, use_count: 223, created_at: "",
   },
   {
-    id: "t9", name: "Builder Agent", role: "Dev", emoji: "🏗️", color: "#1A1A1A",
+    id: "t9", name: "Builder Agent", role: "Dev", emoji: "🏗️", color: "#262624",
     description: "Ships features via FPE protocol & Ralph Wiggums Loop",
     system_prompt: prompt("Builder Agent", "Ship product features. Finish. Process. Effective — production-ready output only, no half-done work. Loop: ship → test → fix → repeat."),
     triggers: ["Ship", "Build"], category: "Operations", is_public: true, use_count: 89, created_at: "",

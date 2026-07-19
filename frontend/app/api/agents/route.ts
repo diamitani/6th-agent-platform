@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
       name,
       role,
       emoji: emoji || "🤖",
-      color: color || "#FF6B00",
+      color: color || "#C96442",
       description,
       system_prompt,
       triggers: triggers || [],

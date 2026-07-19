@@ -37,13 +37,13 @@ interface Toolkit {
 // The standing roster shown before the user deploys their own agents —
 // the 11 ROSTR master agents, always on call.
 const STANDING_ROSTER: RosterAgent[] = [
-  { id: "engineering", name: "Engineering Lead", role: "Architecture & trade-offs", emoji: "⚙️", color: "#FF6B00", status: "standby" },
+  { id: "engineering", name: "Engineering Lead", role: "Architecture & trade-offs", emoji: "⚙️", color: "#C96442", status: "standby" },
   { id: "product", name: "Product Manager", role: "Vision, roadmap, priorities", emoji: "📋", color: "#2563EB", status: "standby" },
   { id: "design", name: "Design Lead", role: "Brand, UI/UX, systems", emoji: "🎨", color: "#DB2777", status: "standby" },
   { id: "development", name: "Development Lead", role: "Full-stack implementation", emoji: "💻", color: "#059669", status: "standby" },
   { id: "backend", name: "Backend Architect", role: "APIs, data, connectors", emoji: "🖥️", color: "#7C3AED", status: "standby" },
   { id: "frontend", name: "Frontend Architect", role: "Interfaces & real-time UX", emoji: "🎭", color: "#0891B2", status: "standby" },
-  { id: "ai", name: "AI/ML Architect", role: "Models, RAG, prompts", emoji: "🤖", color: "#F5C100", status: "standby" },
+  { id: "ai", name: "AI/ML Architect", role: "Models, RAG, prompts", emoji: "🤖", color: "#B08324", status: "standby" },
   { id: "devops", name: "DevOps Engineer", role: "Deploys & infrastructure", emoji: "🚀", color: "#EA580C", status: "standby" },
   { id: "qa", name: "QA Lead", role: "Quality gates & testing", emoji: "✅", color: "#16A34A", status: "standby" },
   { id: "security", name: "Security Engineer", role: "Threats, auth, compliance", emoji: "🔒", color: "#DC2626", status: "standby" },
@@ -88,7 +88,7 @@ export default function CommandCenterPage() {
       .then((d) => {
         const own: RosterAgent[] = (d.agents || []).map((a: any) => ({
           id: a.id, name: a.name, role: a.role, emoji: a.emoji || "🤖",
-          color: a.color || "#FF6B00", status: "active" as const, triggers: a.triggers,
+          color: a.color || "#C96442", status: "active" as const, triggers: a.triggers,
         }))
         setAgents(own)
         if (own.length > 0) {
@@ -188,11 +188,11 @@ export default function CommandCenterPage() {
             </div>
             <div className="flex flex-wrap items-center gap-3">
               <div className="mono-data hidden items-center gap-2 rounded-xl border border-border/50 bg-white/70 px-3.5 py-2 text-xs text-muted-foreground md:flex">
-                <Radio className="h-3.5 w-3.5 text-[#FF6B00]" />
+                <Radio className="h-3.5 w-3.5 text-[#C96442]" />
                 {now ? now.toUTCString().replace("GMT", "UTC") : "—"}
               </div>
               <Link href="/dashboard/builder">
-                <Button className="gap-2 shadow-lg shadow-[#FF6B00]/20">
+                <Button className="gap-2 shadow-lg shadow-[#C96442]/20">
                   <Plus className="h-4 w-4" /> Deploy New Agent
                 </Button>
               </Link>
@@ -228,8 +228,8 @@ export default function CommandCenterPage() {
                     <p className="mt-2 font-heading text-3xl font-bold">{s.value}</p>
                     <p className="mt-1 text-xs text-muted-foreground">{s.sub}</p>
                   </div>
-                  <div className="rounded-xl bg-[#FF6B00]/8 p-2.5">
-                    <s.icon className="h-4.5 w-4.5 text-[#FF6B00]" />
+                  <div className="rounded-xl bg-[#C96442]/8 p-2.5">
+                    <s.icon className="h-4.5 w-4.5 text-[#C96442]" />
                   </div>
                 </div>
               </div>
@@ -242,19 +242,19 @@ export default function CommandCenterPage() {
 
               {/* ---- Agent roster ---- */}
               <div className="command-card relative p-6">
-                <div className="command-rail bg-[#FF6B00]/60" />
+                <div className="command-rail bg-[#C96442]/60" />
                 <div className="mb-5 flex items-center justify-between pl-2">
                   <div>
                     <h2 className="font-heading text-xl font-bold">The Roster</h2>
                     <p className="text-xs text-muted-foreground">Your team — deployed agents lead, master specialists stand ready</p>
                   </div>
-                  <Link href="/dashboard/agents" className="flex items-center gap-1 text-xs font-medium text-[#FF6B00] hover:underline">
+                  <Link href="/dashboard/agents" className="flex items-center gap-1 text-xs font-medium text-[#C96442] hover:underline">
                     Full roster <ArrowUpRight className="h-3 w-3" />
                   </Link>
                 </div>
                 <div className="grid gap-3 pl-2 sm:grid-cols-2">
                   {roster.slice(0, 8).map((a) => (
-                    <div key={a.id} className="group flex items-center gap-3.5 rounded-xl border border-border/40 bg-white/60 p-3.5 transition-all hover:border-[#FF6B00]/25 hover:shadow-sm">
+                    <div key={a.id} className="group flex items-center gap-3.5 rounded-xl border border-border/40 bg-white/60 p-3.5 transition-all hover:border-[#C96442]/25 hover:shadow-sm">
                       <div
                         className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-xl shadow-sm"
                         style={{ backgroundColor: a.color + "14", border: `1px solid ${a.color}25` }}
@@ -337,12 +337,12 @@ export default function CommandCenterPage() {
                                 m.status === "done"
                                   ? "border-border/30 bg-parchment-dark text-muted-foreground/50 line-through"
                                   : m.status === "active"
-                                  ? "border-[#FF6B00]/30 bg-[#FF6B00]/5"
+                                  ? "border-[#C96442]/30 bg-[#C96442]/5"
                                   : "border-border/40 bg-white"
                               }`}
                             >
                               <span className="flex items-start gap-1.5">
-                                <CircleDot className={`mt-0.5 h-3 w-3 shrink-0 ${m.status === "active" ? "text-[#FF6B00]" : "text-muted-foreground/40"}`} />
+                                <CircleDot className={`mt-0.5 h-3 w-3 shrink-0 ${m.status === "active" ? "text-[#C96442]" : "text-muted-foreground/40"}`} />
                                 {m.title}
                               </span>
                             </button>
@@ -375,7 +375,7 @@ export default function CommandCenterPage() {
                 <div className="space-y-1 pl-2">
                   {feed.slice(0, 9).map((e, i) => (
                     <div key={`${e.text}-${i}`} className="animate-feed-in flex items-start gap-2.5 rounded-lg px-2 py-1.5 text-xs hover:bg-parchment-dark/60">
-                      <span className={`mono-data mt-px shrink-0 ${e.tone === "ok" ? "text-emerald-600" : "text-[#FF6B00]"}`}>{e.icon}</span>
+                      <span className={`mono-data mt-px shrink-0 ${e.tone === "ok" ? "text-emerald-600" : "text-[#C96442]"}`}>{e.icon}</span>
                       <span className="text-charcoal/75">{e.text}</span>
                     </div>
                   ))}
@@ -390,13 +390,13 @@ export default function CommandCenterPage() {
                     <h2 className="font-heading text-lg font-bold">The Arsenal</h2>
                     <p className="text-xs text-muted-foreground">Tools your agents can wield — powered by Composio</p>
                   </div>
-                  <Link href="/dashboard/integrations" className="flex items-center gap-1 text-xs font-medium text-[#FF6B00] hover:underline">
+                  <Link href="/dashboard/integrations" className="flex items-center gap-1 text-xs font-medium text-[#C96442] hover:underline">
                     Manage <ArrowUpRight className="h-3 w-3" />
                   </Link>
                 </div>
                 <div className="grid grid-cols-2 gap-2 pl-2">
                   {toolkits.slice(0, 8).map((t) => (
-                    <div key={t.slug} className="flex items-center gap-2.5 rounded-xl border border-border/40 bg-white/60 px-3 py-2.5 transition-all hover:border-[#FF6B00]/25">
+                    <div key={t.slug} className="flex items-center gap-2.5 rounded-xl border border-border/40 bg-white/60 px-3 py-2.5 transition-all hover:border-[#C96442]/25">
                       {t.logo ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={t.logo} alt={t.name} className="h-5 w-5 shrink-0 rounded" />
@@ -433,13 +433,13 @@ export default function CommandCenterPage() {
                     <Link
                       key={d.href}
                       href={d.href}
-                      className="group flex items-center gap-3 rounded-xl border border-border/40 bg-white/60 p-3 transition-all hover:border-[#FF6B00]/30 hover:shadow-sm"
+                      className="group flex items-center gap-3 rounded-xl border border-border/40 bg-white/60 p-3 transition-all hover:border-[#C96442]/30 hover:shadow-sm"
                     >
                       <div className="min-w-0 flex-1">
                         <p className="text-sm font-semibold">{d.label}</p>
                         <p className="text-xs text-muted-foreground">{d.desc}</p>
                       </div>
-                      <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground/40 transition-transform group-hover:translate-x-0.5 group-hover:text-[#FF6B00]" />
+                      <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground/40 transition-transform group-hover:translate-x-0.5 group-hover:text-[#C96442]" />
                     </Link>
                   ))}
                 </div>

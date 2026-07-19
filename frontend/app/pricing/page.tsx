@@ -57,7 +57,7 @@ export default function PricingPage() {
           <Badge variant="gold" className="mb-4 text-[10px] font-semibold uppercase tracking-widest">Pricing</Badge>
           <h1 className="font-heading text-4xl font-bold tracking-tight md:text-5xl">
             From walk-on to starter.<br />
-            <span className="text-[#FF6B00]">Pick your minutes.</span>
+            <span className="text-[#C96442]">Pick your minutes.</span>
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
             Every plan includes your own company instance on AWS — private knowledge base,
@@ -73,11 +73,11 @@ export default function PricingPage() {
             <div
               key={plan.id}
               className={`command-card relative flex flex-col p-6 ${
-                plan.highlight ? "border-[#FF6B00]/40 shadow-lg shadow-[#FF6B00]/10" : ""
+                plan.highlight ? "border-[#C96442]/40 shadow-lg shadow-[#C96442]/10" : ""
               }`}
             >
               {plan.highlight && (
-                <Badge className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-[#FF6B00] text-[10px] uppercase tracking-widest">
+                <Badge className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-[#C96442] text-[10px] uppercase tracking-widest">
                   Most popular
                 </Badge>
               )}
@@ -90,7 +90,7 @@ export default function PricingPage() {
               <ul className="mt-5 flex-1 space-y-2.5">
                 {plan.features.map((f) => (
                   <li key={f} className="flex items-start gap-2 text-sm">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#FF6B00]" />
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#C96442]" />
                     <span className="text-charcoal/80">{f}</span>
                   </li>
                 ))}
@@ -109,7 +109,7 @@ export default function PricingPage() {
       <section className="pb-20">
         <div className="mx-auto grid max-w-4xl gap-5 px-6 md:grid-cols-3">
           <div className="command-card p-5">
-            <Zap className="h-5 w-5 text-[#FF6B00]" />
+            <Zap className="h-5 w-5 text-[#C96442]" />
             <p className="mt-3 text-sm font-semibold">Credits, simply</p>
             <p className="mt-1 text-xs text-muted-foreground">
               1 credit = $0.01 of model time on AWS Bedrock (Claude). Every agent run is
@@ -117,7 +117,7 @@ export default function PricingPage() {
             </p>
           </div>
           <div className="command-card p-5">
-            <Key className="h-5 w-5 text-[#FF6B00]" />
+            <Key className="h-5 w-5 text-[#C96442]" />
             <p className="mt-3 text-sm font-semibold">Bring your own key</p>
             <p className="mt-1 text-xs text-muted-foreground">
               Plug in your Anthropic, OpenAI, or Bedrock key on Core and above — your
@@ -125,7 +125,7 @@ export default function PricingPage() {
             </p>
           </div>
           <div className="command-card p-5">
-            <Shield className="h-5 w-5 text-[#FF6B00]" />
+            <Shield className="h-5 w-5 text-[#C96442]" />
             <p className="mt-3 text-sm font-semibold">Your instance, isolated</p>
             <p className="mt-1 text-xs text-muted-foreground">
               Each company gets its own namespaced instance on AWS — encrypted S3
