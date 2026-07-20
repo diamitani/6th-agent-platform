@@ -23,6 +23,7 @@ from api.routes import (
     cloud_instances,
     byok,
     setup,
+    web_search,
 )
 from rostr.hub.registry import AgentRegistry
 from rostr.hub.state_manager import StateManager
@@ -157,6 +158,7 @@ app.include_router(channels.router, prefix="/api/channels", tags=["Channels"])
 app.include_router(cloud_instances.router, prefix="/api/cloud", tags=["Cloud"])
 app.include_router(byok.router, prefix="/api/byok", tags=["BYOK"])
 app.include_router(setup.router, prefix="/api/setup", tags=["Setup"])
+app.include_router(web_search.router, prefix="/api/search", tags=["Web Search"])
 
 
 @app.get("/")

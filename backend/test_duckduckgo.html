@@ -1,0 +1,748 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--[if IE 6]><html class="ie6" xmlns="http://www.w3.org/1999/xhtml"><![endif]-->
+<!--[if IE 7]><html class="lt-ie8 lt-ie9" xmlns="http://www.w3.org/1999/xhtml"><![endif]-->
+<!--[if IE 8]><html class="lt-ie9" xmlns="http://www.w3.org/1999/xhtml"><![endif]-->
+<!--[if gt IE 8]><!-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <!--<![endif]-->
+ <head>
+  <meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=1" name="viewport"/>
+  <meta content="origin" name="referrer"/>
+  <meta content="true" name="HandheldFriendly"/>
+  <meta content="noindex, nofollow" name="robots"/>
+  <title>
+   Python web scraping at DuckDuckGo
+  </title>
+  <link href="//duckduckgo.com/opensearch_html_v2.xml" rel="search" title="DuckDuckGo (HTML)" type="application/opensearchdescription+xml"/>
+  <link href="//duckduckgo.com/favicon.ico" rel="shortcut icon"/>
+  <link href="//duckduckgo.com/favicon.ico" rel="icon" type="image/x-icon"/>
+  <link href="//duckduckgo.com/assets/icons/meta/DDG-iOS-icon_60x60.png?v=2" id="icon60" rel="apple-touch-icon"/>
+  <link href="//duckduckgo.com/assets/icons/meta/DDG-iOS-icon_76x76.png?v=2" id="icon76" rel="apple-touch-icon" sizes="76x76"/>
+  <link href="//duckduckgo.com/assets/icons/meta/DDG-iOS-icon_120x120.png?v=2" id="icon120" rel="apple-touch-icon" sizes="120x120"/>
+  <link href="//duckduckgo.com/assets/icons/meta/DDG-iOS-icon_152x152.png?v=2" id="icon152" rel="apple-touch-icon" sizes="152x152"/>
+  <link href="//duckduckgo.com/assets/icons/meta/DDG-icon_256x256.png" rel="image_src"/>
+  <link href="//duckduckgo.com/dist/h.238c80a7d9b754cfcdd5.css" media="handheld, all" rel="stylesheet" type="text/css"/>
+ </head>
+ <body class="body--html">
+  <a id="top" name="top">
+  </a>
+  <form action="/html/" method="post">
+   <input id="state_hidden" name="state_hidden" type="text"/>
+  </form>
+  <div>
+   <div class="site-wrapper-border">
+   </div>
+   <div class="header cw header--html" id="header">
+    <a class="header__logo-wrap" href="/html/" title="DuckDuckGo">
+    </a>
+    <form action="/html/" class="header__form" method="post" name="x">
+     <div class="search search--header">
+      <input autocomplete="off" class="search__input" id="search_form_input_homepage" name="q" type="text" value="Python web scraping"/>
+      <input alt="Search" class="search__button search__button--html" id="search_button_homepage" name="b" title="Search" type="submit" value=""/>
+     </div>
+     <div class="frm__select">
+      <select name="kl">
+       <option value="">
+        All Regions
+       </option>
+       <option value="ar-es">
+        Argentina
+       </option>
+       <option value="au-en">
+        Australia
+       </option>
+       <option value="at-de">
+        Austria
+       </option>
+       <option value="be-fr">
+        Belgium (fr)
+       </option>
+       <option value="be-nl">
+        Belgium (nl)
+       </option>
+       <option value="br-pt">
+        Brazil
+       </option>
+       <option value="bg-bg">
+        Bulgaria
+       </option>
+       <option value="ca-en">
+        Canada (en)
+       </option>
+       <option value="ca-fr">
+        Canada (fr)
+       </option>
+       <option value="ct-ca">
+        Catalonia
+       </option>
+       <option value="cl-es">
+        Chile
+       </option>
+       <option value="cn-zh">
+        China
+       </option>
+       <option value="co-es">
+        Colombia
+       </option>
+       <option value="hr-hr">
+        Croatia
+       </option>
+       <option value="cz-cs">
+        Czech Republic
+       </option>
+       <option value="dk-da">
+        Denmark
+       </option>
+       <option value="ee-et">
+        Estonia
+       </option>
+       <option value="fi-fi">
+        Finland
+       </option>
+       <option value="fr-fr">
+        France
+       </option>
+       <option value="de-de">
+        Germany
+       </option>
+       <option value="gr-el">
+        Greece
+       </option>
+       <option value="hk-tzh">
+        Hong Kong
+       </option>
+       <option value="hu-hu">
+        Hungary
+       </option>
+       <option value="is-is">
+        Iceland
+       </option>
+       <option value="in-en">
+        India (en)
+       </option>
+       <option value="id-en">
+        Indonesia (en)
+       </option>
+       <option value="ie-en">
+        Ireland
+       </option>
+       <option value="il-en">
+        Israel (en)
+       </option>
+       <option value="it-it">
+        Italy
+       </option>
+       <option value="jp-jp">
+        Japan
+       </option>
+       <option value="kr-kr">
+        Korea
+       </option>
+       <option value="lv-lv">
+        Latvia
+       </option>
+       <option value="lt-lt">
+        Lithuania
+       </option>
+       <option value="my-en">
+        Malaysia (en)
+       </option>
+       <option value="mx-es">
+        Mexico
+       </option>
+       <option value="nl-nl">
+        Netherlands
+       </option>
+       <option value="nz-en">
+        New Zealand
+       </option>
+       <option value="no-no">
+        Norway
+       </option>
+       <option value="pk-en">
+        Pakistan (en)
+       </option>
+       <option value="pe-es">
+        Peru
+       </option>
+       <option value="ph-en">
+        Philippines (en)
+       </option>
+       <option value="pl-pl">
+        Poland
+       </option>
+       <option value="pt-pt">
+        Portugal
+       </option>
+       <option value="ro-ro">
+        Romania
+       </option>
+       <option value="ru-ru">
+        Russia
+       </option>
+       <option value="xa-ar">
+        Saudi Arabia
+       </option>
+       <option value="sg-en">
+        Singapore
+       </option>
+       <option value="sk-sk">
+        Slovakia
+       </option>
+       <option value="sl-sl">
+        Slovenia
+       </option>
+       <option value="za-en">
+        South Africa
+       </option>
+       <option value="es-ca">
+        Spain (ca)
+       </option>
+       <option value="es-es">
+        Spain (es)
+       </option>
+       <option value="se-sv">
+        Sweden
+       </option>
+       <option value="ch-de">
+        Switzerland (de)
+       </option>
+       <option value="ch-fr">
+        Switzerland (fr)
+       </option>
+       <option value="tw-tzh">
+        Taiwan
+       </option>
+       <option value="th-en">
+        Thailand (en)
+       </option>
+       <option value="tr-tr">
+        Turkey
+       </option>
+       <option value="us-en">
+        US (English)
+       </option>
+       <option value="us-es">
+        US (Spanish)
+       </option>
+       <option value="ua-uk">
+        Ukraine
+       </option>
+       <option value="uk-en">
+        United Kingdom
+       </option>
+       <option value="vn-en">
+        Vietnam (en)
+       </option>
+      </select>
+     </div>
+     <div class="frm__select frm__select--last">
+      <select class="" name="df">
+       <option selected="" value="">
+        Any Time
+       </option>
+       <option value="d">
+        Past Day
+       </option>
+       <option value="w">
+        Past Week
+       </option>
+       <option value="m">
+        Past Month
+       </option>
+       <option value="y">
+        Past Year
+       </option>
+      </select>
+     </div>
+    </form>
+   </div>
+   <!-- Web results are present -->
+   <div>
+    <div class="serp__results">
+     <div class="results" id="links">
+      <div class="result results_links results_links_deep web-result">
+       <div class="links_main links_deep result__body">
+        <!-- This is the visible part -->
+        <h2 class="result__title">
+         <a class="result__a" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.geeksforgeeks.org%2Fpython%2Fpython%2Dweb%2Dscraping%2Dtutorial%2F&amp;rut=a7347ef8d851c1a537d2bd7ad217c25f27721d67b4ca64d466a0fb5598a59bb8" rel="nofollow">
+          Python Web Scraping Tutorial - GeeksforGeeks
+         </a>
+        </h2>
+        <div class="result__extras">
+         <div class="result__extras__url">
+          <span class="result__icon">
+           <a href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.geeksforgeeks.org%2Fpython%2Fpython%2Dweb%2Dscraping%2Dtutorial%2F&amp;rut=a7347ef8d851c1a537d2bd7ad217c25f27721d67b4ca64d466a0fb5598a59bb8" rel="nofollow">
+            <img alt="" class="result__icon__img" height="16" name="i15" src="//external-content.duckduckgo.com/ip3/www.geeksforgeeks.org.ico" width="16"/>
+           </a>
+          </span>
+          <a class="result__url" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.geeksforgeeks.org%2Fpython%2Fpython%2Dweb%2Dscraping%2Dtutorial%2F&amp;rut=a7347ef8d851c1a537d2bd7ad217c25f27721d67b4ca64d466a0fb5598a59bb8">
+           www.geeksforgeeks.org/python/python-web-scraping-tutorial/
+          </a>
+         </div>
+        </div>
+        <a class="result__snippet" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.geeksforgeeks.org%2Fpython%2Fpython%2Dweb%2Dscraping%2Dtutorial%2F&amp;rut=a7347ef8d851c1a537d2bd7ad217c25f27721d67b4ca64d466a0fb5598a59bb8">
+         <b>
+          Web
+         </b>
+         <b>
+          scraping
+         </b>
+         is the process of extracting data from websites automatically.
+         <b>
+          Python
+         </b>
+         is widely used for
+         <b>
+          web
+         </b>
+         <b>
+          scraping
+         </b>
+         because of its easy syntax and powerful libraries like BeautifulSoup, Scrapy and Selenium. In this tutorial, you'll learn how to use these
+         <b>
+          Python
+         </b>
+         tools to scrape data from websites and understand why
+         <b>
+          Python
+         </b>
+         3 is a popular choice for
+         <b>
+          web
+         </b>
+         <b>
+          scraping
+         </b>
+         tasks.
+        </a>
+        <div class="clear">
+        </div>
+       </div>
+      </div>
+      <div class="result results_links results_links_deep web-result">
+       <div class="links_main links_deep result__body">
+        <!-- This is the visible part -->
+        <h2 class="result__title">
+         <a class="result__a" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Frealpython.com%2Fbeautiful%2Dsoup%2Dweb%2Dscraper%2Dpython%2F&amp;rut=b06c8af3c6f55372ae4859b11be2fa629c554590f43124f2f7a13f021d377077" rel="nofollow">
+          Beautiful Soup: Build a Web Scraper With Python
+         </a>
+        </h2>
+        <div class="result__extras">
+         <div class="result__extras__url">
+          <span class="result__icon">
+           <a href="//duckduckgo.com/l/?uddg=https%3A%2F%2Frealpython.com%2Fbeautiful%2Dsoup%2Dweb%2Dscraper%2Dpython%2F&amp;rut=b06c8af3c6f55372ae4859b11be2fa629c554590f43124f2f7a13f021d377077" rel="nofollow">
+            <img alt="" class="result__icon__img" height="16" name="i15" src="//external-content.duckduckgo.com/ip3/realpython.com.ico" width="16"/>
+           </a>
+          </span>
+          <a class="result__url" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Frealpython.com%2Fbeautiful%2Dsoup%2Dweb%2Dscraper%2Dpython%2F&amp;rut=b06c8af3c6f55372ae4859b11be2fa629c554590f43124f2f7a13f021d377077">
+           realpython.com/beautiful-soup-web-scraper-python/
+          </a>
+         </div>
+        </div>
+        <a class="result__snippet" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Frealpython.com%2Fbeautiful%2Dsoup%2Dweb%2Dscraper%2Dpython%2F&amp;rut=b06c8af3c6f55372ae4859b11be2fa629c554590f43124f2f7a13f021d377077">
+         Learn how to use Beautiful Soup and Requests to scrape and parse HTML documents from static websites. Follow a step-by-step tutorial with code examples and a quiz to test your knowledge.
+        </a>
+        <div class="clear">
+        </div>
+       </div>
+      </div>
+      <div class="result results_links results_links_deep web-result">
+       <div class="links_main links_deep result__body">
+        <!-- This is the visible part -->
+        <h2 class="result__title">
+         <a class="result__a" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.scrapingbee.com%2Fblog%2Fweb%2Dscraping%2D101%2Dwith%2Dpython%2F&amp;rut=ca5de7599b8f176c0f2e6363fd58fc08b4e565fc274dc59c874bebf83c55cc3c" rel="nofollow">
+          Python Web Scraping Tutorial for 2026 with Examples &amp; Best Practices
+         </a>
+        </h2>
+        <div class="result__extras">
+         <div class="result__extras__url">
+          <span class="result__icon">
+           <a href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.scrapingbee.com%2Fblog%2Fweb%2Dscraping%2D101%2Dwith%2Dpython%2F&amp;rut=ca5de7599b8f176c0f2e6363fd58fc08b4e565fc274dc59c874bebf83c55cc3c" rel="nofollow">
+            <img alt="" class="result__icon__img" height="16" name="i15" src="//external-content.duckduckgo.com/ip3/www.scrapingbee.com.ico" width="16"/>
+           </a>
+          </span>
+          <a class="result__url" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.scrapingbee.com%2Fblog%2Fweb%2Dscraping%2D101%2Dwith%2Dpython%2F&amp;rut=ca5de7599b8f176c0f2e6363fd58fc08b4e565fc274dc59c874bebf83c55cc3c">
+           www.scrapingbee.com/blog/web-scraping-101-with-python/
+          </a>
+         </div>
+        </div>
+        <a class="result__snippet" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.scrapingbee.com%2Fblog%2Fweb%2Dscraping%2D101%2Dwith%2Dpython%2F&amp;rut=ca5de7599b8f176c0f2e6363fd58fc08b4e565fc274dc59c874bebf83c55cc3c">
+         Learn how to scrape data from websites automatically with
+         <b>
+          Python
+         </b>
+         , from the basics to advanced techniques. This tutorial covers
+         <b>
+          web
+         </b>
+         <b>
+          scraping
+         </b>
+         tools, methods, tips, and best practices with real-world examples.
+        </a>
+        <div class="clear">
+        </div>
+       </div>
+      </div>
+      <div class="result results_links results_links_deep web-result">
+       <div class="links_main links_deep result__body">
+        <!-- This is the visible part -->
+        <h2 class="result__title">
+         <a class="result__a" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Frealpython.com%2Fpython%2Dweb%2Dscraping%2Dpractical%2Dintroduction%2F&amp;rut=1f20b47f0eac44853afef488d2d8775c38b59ac21701ab9cb622d2257544c101" rel="nofollow">
+          A Practical Introduction to Web Scraping in Python
+         </a>
+        </h2>
+        <div class="result__extras">
+         <div class="result__extras__url">
+          <span class="result__icon">
+           <a href="//duckduckgo.com/l/?uddg=https%3A%2F%2Frealpython.com%2Fpython%2Dweb%2Dscraping%2Dpractical%2Dintroduction%2F&amp;rut=1f20b47f0eac44853afef488d2d8775c38b59ac21701ab9cb622d2257544c101" rel="nofollow">
+            <img alt="" class="result__icon__img" height="16" name="i15" src="//external-content.duckduckgo.com/ip3/realpython.com.ico" width="16"/>
+           </a>
+          </span>
+          <a class="result__url" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Frealpython.com%2Fpython%2Dweb%2Dscraping%2Dpractical%2Dintroduction%2F&amp;rut=1f20b47f0eac44853afef488d2d8775c38b59ac21701ab9cb622d2257544c101">
+           realpython.com/python-web-scraping-practical-introduction/
+          </a>
+         </div>
+        </div>
+        <a class="result__snippet" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Frealpython.com%2Fpython%2Dweb%2Dscraping%2Dpractical%2Dintroduction%2F&amp;rut=1f20b47f0eac44853afef488d2d8775c38b59ac21701ab9cb622d2257544c101">
+         In this tutorial, you'll learn all about
+         <b>
+          web
+         </b>
+         <b>
+          scraping
+         </b>
+         in
+         <b>
+          Python
+         </b>
+         . You'll see how to parse data from websites and interact with HTML forms using tools such as Beautiful Soup and MechanicalSoup.
+        </a>
+        <div class="clear">
+        </div>
+       </div>
+      </div>
+      <div class="result results_links results_links_deep web-result">
+       <div class="links_main links_deep result__body">
+        <!-- This is the visible part -->
+        <h2 class="result__title">
+         <a class="result__a" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.geeksforgeeks.org%2Fpython%2Fimplementing%2Dweb%2Dscraping%2Dpython%2Dbeautiful%2Dsoup%2F&amp;rut=8179273ef376d0c4d1758803ff28b5918daf0a848add9521694b722d2b1c8248" rel="nofollow">
+          Implementing Web Scraping in Python with BeautifulSoup
+         </a>
+        </h2>
+        <div class="result__extras">
+         <div class="result__extras__url">
+          <span class="result__icon">
+           <a href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.geeksforgeeks.org%2Fpython%2Fimplementing%2Dweb%2Dscraping%2Dpython%2Dbeautiful%2Dsoup%2F&amp;rut=8179273ef376d0c4d1758803ff28b5918daf0a848add9521694b722d2b1c8248" rel="nofollow">
+            <img alt="" class="result__icon__img" height="16" name="i15" src="//external-content.duckduckgo.com/ip3/www.geeksforgeeks.org.ico" width="16"/>
+           </a>
+          </span>
+          <a class="result__url" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.geeksforgeeks.org%2Fpython%2Fimplementing%2Dweb%2Dscraping%2Dpython%2Dbeautiful%2Dsoup%2F&amp;rut=8179273ef376d0c4d1758803ff28b5918daf0a848add9521694b722d2b1c8248">
+           www.geeksforgeeks.org/python/implementing-web-scraping-python-beautiful-soup/
+          </a>
+         </div>
+        </div>
+        <a class="result__snippet" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.geeksforgeeks.org%2Fpython%2Fimplementing%2Dweb%2Dscraping%2Dpython%2Dbeautiful%2Dsoup%2F&amp;rut=8179273ef376d0c4d1758803ff28b5918daf0a848add9521694b722d2b1c8248">
+         BeautifulSoup is a
+         <b>
+          Python
+         </b>
+         library used for
+         <b>
+          web
+         </b>
+         <b>
+          scraping
+         </b>
+         . It helps parse HTML and XML documents making it easy to navigate and extract specific parts of a webpage. This article explains the steps of
+         <b>
+          web
+         </b>
+         <b>
+          scraping
+         </b>
+         using BeautifulSoup. Steps involved in
+         <b>
+          web
+         </b>
+         <b>
+          scraping
+         </b>
+         Send an HTTP Request: Use the requests library to send a request to the webpage URL and get the HTML content in response. Parse the ...
+        </a>
+        <div class="clear">
+        </div>
+       </div>
+      </div>
+      <div class="result results_links results_links_deep web-result">
+       <div class="links_main links_deep result__body">
+        <!-- This is the visible part -->
+        <h2 class="result__title">
+         <a class="result__a" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fgithub.com%2Fluminati%2Dio%2FPython%2Dweb%2Dscraping&amp;rut=7a16df5d40cf64a63ce54d3e4645fcbee68a43f1f3541eb646136aa52efc7bd3" rel="nofollow">
+          Python Web Scraping Guide - GitHub
+         </a>
+        </h2>
+        <div class="result__extras">
+         <div class="result__extras__url">
+          <span class="result__icon">
+           <a href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fgithub.com%2Fluminati%2Dio%2FPython%2Dweb%2Dscraping&amp;rut=7a16df5d40cf64a63ce54d3e4645fcbee68a43f1f3541eb646136aa52efc7bd3" rel="nofollow">
+            <img alt="" class="result__icon__img" height="16" name="i15" src="//external-content.duckduckgo.com/ip3/github.com.ico" width="16"/>
+           </a>
+          </span>
+          <a class="result__url" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fgithub.com%2Fluminati%2Dio%2FPython%2Dweb%2Dscraping&amp;rut=7a16df5d40cf64a63ce54d3e4645fcbee68a43f1f3541eb646136aa52efc7bd3">
+           github.com/luminati-io/Python-web-scraping
+          </a>
+         </div>
+        </div>
+        <a class="result__snippet" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fgithub.com%2Fluminati%2Dio%2FPython%2Dweb%2Dscraping&amp;rut=7a16df5d40cf64a63ce54d3e4645fcbee68a43f1f3541eb646136aa52efc7bd3">
+         In this
+         <b>
+          Python
+         </b>
+         <b>
+          Web
+         </b>
+         <b>
+          Scraping
+         </b>
+         repository, you will find everything you need to get started with
+         <b>
+          web
+         </b>
+         <b>
+          scraping
+         </b>
+         . We will explore how
+         <b>
+          web
+         </b>
+         <b>
+          scraping
+         </b>
+         works, dive into various approaches in
+         <b>
+          Python
+         </b>
+         , and review complete examples at the end.
+         <b>
+          Python
+         </b>
+         is widely considered one of the best languages for
+         <b>
+          web
+         </b>
+         <b>
+          scraping
+         </b>
+         thanks to its simple syntax and a vast selection of open-source libraries. Time to learn more ...
+        </a>
+        <div class="clear">
+        </div>
+       </div>
+      </div>
+      <div class="result results_links results_links_deep web-result">
+       <div class="links_main links_deep result__body">
+        <!-- This is the visible part -->
+        <h2 class="result__title">
+         <a class="result__a" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.scrapingdog.com%2Fblog%2Fweb%2Dscraping%2Dwith%2Dpython%2F&amp;rut=5f17d641eeb77954d95c3379a210c4336c442c9fb8b96054f02a90f4d780fb76" rel="nofollow">
+          Web Scraping with Python: Complete Tutorial with Examples (2026)
+         </a>
+        </h2>
+        <div class="result__extras">
+         <div class="result__extras__url">
+          <span class="result__icon">
+           <a href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.scrapingdog.com%2Fblog%2Fweb%2Dscraping%2Dwith%2Dpython%2F&amp;rut=5f17d641eeb77954d95c3379a210c4336c442c9fb8b96054f02a90f4d780fb76" rel="nofollow">
+            <img alt="" class="result__icon__img" height="16" name="i15" src="//external-content.duckduckgo.com/ip3/www.scrapingdog.com.ico" width="16"/>
+           </a>
+          </span>
+          <a class="result__url" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.scrapingdog.com%2Fblog%2Fweb%2Dscraping%2Dwith%2Dpython%2F&amp;rut=5f17d641eeb77954d95c3379a210c4336c442c9fb8b96054f02a90f4d780fb76">
+           www.scrapingdog.com/blog/web-scraping-with-python/
+          </a>
+         </div>
+        </div>
+        <a class="result__snippet" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.scrapingdog.com%2Fblog%2Fweb%2Dscraping%2Dwith%2Dpython%2F&amp;rut=5f17d641eeb77954d95c3379a210c4336c442c9fb8b96054f02a90f4d780fb76">
+         Learn
+         <b>
+          web
+         </b>
+         <b>
+          scraping
+         </b>
+         with
+         <b>
+          Python
+         </b>
+         using 8 libraries, Requests, BeautifulSoup, Scrapy, Selenium, Playwright &amp; more. Build a real Amazon scraper with working code examples. Free tutorial (2026).
+        </a>
+        <div class="clear">
+        </div>
+       </div>
+      </div>
+      <div class="result results_links results_links_deep web-result">
+       <div class="links_main links_deep result__body">
+        <!-- This is the visible part -->
+        <h2 class="result__title">
+         <a class="result__a" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.tutorialspoint.com%2Fpython_web_scraping%2Findex.htm&amp;rut=ae2a2c6bc15155ea4be036b0fe8bd076d4e3a1cc88854119c756340846232a0b" rel="nofollow">
+          Python Web Scraping Tutorial - Online Tutorials Library
+         </a>
+        </h2>
+        <div class="result__extras">
+         <div class="result__extras__url">
+          <span class="result__icon">
+           <a href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.tutorialspoint.com%2Fpython_web_scraping%2Findex.htm&amp;rut=ae2a2c6bc15155ea4be036b0fe8bd076d4e3a1cc88854119c756340846232a0b" rel="nofollow">
+            <img alt="" class="result__icon__img" height="16" name="i15" src="//external-content.duckduckgo.com/ip3/www.tutorialspoint.com.ico" width="16"/>
+           </a>
+          </span>
+          <a class="result__url" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.tutorialspoint.com%2Fpython_web_scraping%2Findex.htm&amp;rut=ae2a2c6bc15155ea4be036b0fe8bd076d4e3a1cc88854119c756340846232a0b">
+           www.tutorialspoint.com/python_web_scraping/index.htm
+          </a>
+         </div>
+        </div>
+        <a class="result__snippet" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.tutorialspoint.com%2Fpython_web_scraping%2Findex.htm&amp;rut=ae2a2c6bc15155ea4be036b0fe8bd076d4e3a1cc88854119c756340846232a0b">
+         <b>
+          Web
+         </b>
+         <b>
+          scraping
+         </b>
+         , also called
+         <b>
+          web
+         </b>
+         data mining or
+         <b>
+          web
+         </b>
+         harvesting, is the process of constructing an agent which can extract, parse, download and organize useful information from the
+         <b>
+          web
+         </b>
+         automatically.
+        </a>
+        <div class="clear">
+        </div>
+       </div>
+      </div>
+      <div class="result results_links results_links_deep web-result">
+       <div class="links_main links_deep result__body">
+        <!-- This is the visible part -->
+        <h2 class="result__title">
+         <a class="result__a" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fpythongeeks.net%2Fpython%2Dtutorials%2Fhow%2Dto%2Dscrape%2Ddata%2Dfrom%2Da%2Dwebsite%2Dusing%2Dpython%2F&amp;rut=6d2fff3544102bd79ec48e2d2bac55e7296201ebe31d4af3902e2ef145fe7841" rel="nofollow">
+          Python Web Scraping Tutorial with BeautifulSoup
+         </a>
+        </h2>
+        <div class="result__extras">
+         <div class="result__extras__url">
+          <span class="result__icon">
+           <a href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fpythongeeks.net%2Fpython%2Dtutorials%2Fhow%2Dto%2Dscrape%2Ddata%2Dfrom%2Da%2Dwebsite%2Dusing%2Dpython%2F&amp;rut=6d2fff3544102bd79ec48e2d2bac55e7296201ebe31d4af3902e2ef145fe7841" rel="nofollow">
+            <img alt="" class="result__icon__img" height="16" name="i15" src="//external-content.duckduckgo.com/ip3/pythongeeks.net.ico" width="16"/>
+           </a>
+          </span>
+          <a class="result__url" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fpythongeeks.net%2Fpython%2Dtutorials%2Fhow%2Dto%2Dscrape%2Ddata%2Dfrom%2Da%2Dwebsite%2Dusing%2Dpython%2F&amp;rut=6d2fff3544102bd79ec48e2d2bac55e7296201ebe31d4af3902e2ef145fe7841">
+           pythongeeks.net/python-tutorials/how-to-scrape-data-from-a-website-using-python/
+          </a>
+         </div>
+        </div>
+        <a class="result__snippet" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fpythongeeks.net%2Fpython%2Dtutorials%2Fhow%2Dto%2Dscrape%2Ddata%2Dfrom%2Da%2Dwebsite%2Dusing%2Dpython%2F&amp;rut=6d2fff3544102bd79ec48e2d2bac55e7296201ebe31d4af3902e2ef145fe7841">
+         Conclusion
+         <b>
+          Web
+         </b>
+         <b>
+          scraping
+         </b>
+         with
+         <b>
+          Python
+         </b>
+         is a pivotal skill for anyone looking to automate data collection from websites efficiently. From setting up the environment to parsing HTML and storing data in structured formats,
+         <b>
+          Python
+         </b>
+         provides a robust toolkit for handling these tasks seamlessly. Whether you're interested in a
+         <b>
+          Python
+         </b>
+         BeautifulSoup tutorial or advanced
+         <b>
+          web
+         </b>
+         <b>
+          scraping
+         </b>
+         projects ...
+        </a>
+        <div class="clear">
+        </div>
+       </div>
+      </div>
+      <div class="result results_links results_links_deep web-result">
+       <div class="links_main links_deep result__body">
+        <!-- This is the visible part -->
+        <h2 class="result__title">
+         <a class="result__a" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.capsolver.com%2Fblog%2Fweb%2Dscraping%2Fbest%2Dpython%2Dweb%2Dscraping%2Dlibraries&amp;rut=924b4fbab122bc750226cc0381e1e4dc1e57a20e4e96fb014eb8e9d236f18ded" rel="nofollow">
+          Top Python Web Scraping Libraries 2026 - capsolver.com
+         </a>
+        </h2>
+        <div class="result__extras">
+         <div class="result__extras__url">
+          <span class="result__icon">
+           <a href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.capsolver.com%2Fblog%2Fweb%2Dscraping%2Fbest%2Dpython%2Dweb%2Dscraping%2Dlibraries&amp;rut=924b4fbab122bc750226cc0381e1e4dc1e57a20e4e96fb014eb8e9d236f18ded" rel="nofollow">
+            <img alt="" class="result__icon__img" height="16" name="i15" src="//external-content.duckduckgo.com/ip3/www.capsolver.com.ico" width="16"/>
+           </a>
+          </span>
+          <a class="result__url" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.capsolver.com%2Fblog%2Fweb%2Dscraping%2Fbest%2Dpython%2Dweb%2Dscraping%2Dlibraries&amp;rut=924b4fbab122bc750226cc0381e1e4dc1e57a20e4e96fb014eb8e9d236f18ded">
+           www.capsolver.com/blog/web-scraping/best-python-web-scraping-libraries
+          </a>
+         </div>
+        </div>
+        <a class="result__snippet" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.capsolver.com%2Fblog%2Fweb%2Dscraping%2Fbest%2Dpython%2Dweb%2Dscraping%2Dlibraries&amp;rut=924b4fbab122bc750226cc0381e1e4dc1e57a20e4e96fb014eb8e9d236f18ded">
+         Explore the best
+         <b>
+          Python
+         </b>
+         <b>
+          web
+         </b>
+         <b>
+          scraping
+         </b>
+         libraries for 2026. Compare features, ease of use, and performance for your data extraction needs. Includes expert insights and FAQs.
+        </a>
+        <div class="clear">
+        </div>
+       </div>
+      </div>
+      <div class="nav-link">
+       <form action="/html/" method="post">
+        <input class="btn btn--alt" type="submit" value="Next"/>
+        <input name="q" type="hidden" value="Python web scraping"/>
+        <input name="s" type="hidden" value="10"/>
+        <input name="nextParams" type="hidden" value=""/>
+        <input name="v" type="hidden" value="l"/>
+        <input name="o" type="hidden" value="json"/>
+        <input name="dc" type="hidden" value="11"/>
+        <input name="api" type="hidden" value="d.js"/>
+        <input name="vqd" type="hidden" value="4-327800704477963161246527575132048716097"/>
+        <input name="kl" type="hidden" value="wt-wt"/>
+       </form>
+      </div>
+      <div class="feedback-btn">
+       <a href="//duckduckgo.com/feedback.html" rel="nofollow" target="_new">
+        Feedback
+       </a>
+      </div>
+      <div class="clear">
+      </div>
+     </div>
+    </div>
+   </div>
+   <!-- links wrapper //-->
+  </div>
+  <div id="bottom_spacing2">
+  </div>
+  <img src="//duckduckgo.com/t/sl_h"/>
+ </body>
+</html>
