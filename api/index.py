@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException, Header, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.responses import HTMLResponse
 from typing import Optional, Dict, Any
 import os
 import sys
@@ -189,21 +190,187 @@ async def verify_token_endpoint(credentials: HTTPAuthorizationCredentials = Depe
         }
     }
 
-# Root endpoint
+# Root endpoint - landing page
 @app.get("/")
 async def root():
-    return {
-        "app": "6th Agent Platform v2.1.0",
-        "version": "2.1.0",
-        "docs": "/api/v2/docs",
-        "auth": {
-            "login": "/api/v2/auth/login",
-            "signup": "/api/v2/auth/signup",
-            "verify": "/api/v2/auth/verify"
-        },
-        "github": "https://github.com/diamitani/6th-agent-platform",
-        "vercel_url": "https://6th-agent-platform.vercel.app"
-    }
+    html_content = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6th Agent Platform | Modern SaaS Platform</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, white 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero {
+            padding: 4rem 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #0f172a 0%, #059669 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+        
+        .login-box {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin: 2rem auto;
+        }
+        
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+        
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background: #059669;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background: #047857;
+        }
+        
+        .demo {
+            background: #f1f5f9;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            font-size: 0.875rem;
+        }
+        
+        .demo-credentials {
+            font-family: monospace;
+            background: white;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero">
+            <h1>✅ 6th Agent Platform</h1>
+            <p style="font-size: 1.125rem; color: #475569; max-width: 600px; margin: 0 auto 2rem;">
+                Modern SaaS platform with JWT authentication, multi-tenant workspaces, and comprehensive API.
+            </p>
+            
+            <div class="login-box">
+                <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem;">Sign In</h2>
+                <form id="loginForm">
+                    <input type="email" id="email" placeholder="Email address" value="patrick.diamitani@gmail.com" required>
+                    <input type="password" id="password" placeholder="Password" value="test123" required>
+                    <button type="submit" id="submitBtn">Sign In → Dashboard</button>
+                </form>
+                
+                <div class="demo">
+                    <div><strong>Demo Account:</strong></div>
+                    <div class="demo-credentials">
+                        Email: patrick.diamitani@gmail.com<br>
+                        Password: test123
+                    </div>
+                </div>
+                
+                <div id="result" style="margin-top: 1rem;"></div>
+            </div>
+            
+            <p style="margin-top: 3rem; color: #64748b; font-size: 0.875rem;">
+                <a href="/api/v2/docs" style="color: #059669; text-decoration: none;">API Documentation</a> • 
+                <a href="/api/v2/health" style="color: #059669; text-decoration: none;">Health Check</a> • 
+                <a href="https://github.com/diamitani/6th-agent-platform" target="_blank" style="color: #059669; text-decoration: none;">GitHub</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = window.location.origin
+        
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault()
+            
+            const email = document.getElementById('email').value
+            const password = document.getElementById('password').value
+            const submitBtn = document.getElementById('submitBtn')
+            const resultDiv = document.getElementById('result')
+            
+            resultDiv.innerHTML = ''
+            resultDiv.style = ''
+            submitBtn.disabled = true
+            submitBtn.textContent = 'Signing in...'
+            
+            try {
+                const response = await fetch(`${API_URL}/api/v2/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                })
+                
+                const data = await response.json()
+                
+                if (response.ok) {
+                    resultDiv.style.background = '#d1fae5'
+                    resultDiv.style.color = '#065f46'
+                    resultDiv.style.padding = '1rem'
+                    resultDiv.style.borderRadius = '0.5rem'
+                    resultDiv.innerHTML = '✅ Login successful! Redirecting...'
+                    
+                    localStorage.setItem('6th-agent-token', data.access_token)
+                    
+                    setTimeout(() => {
+                        window.location.href = '/api/v2/free-test'
+                    }, 1000)
+                } else {
+                    resultDiv.style.background = '#fee2e2'
+                    resultDiv.style.color = '#991b1b'
+                    resultDiv.style.padding = '1rem'
+                    resultDiv.style.borderRadius = '0.5rem'
+                    resultDiv.innerHTML = `❌ Error: ${data.detail || 'Login failed'}`
+                }
+            } catch (error) {
+                resultDiv.style.background = '#fee2e2'
+                resultDiv.style.color = '#991b1b'
+                resultDiv.style.padding = '1rem'
+                resultDiv.style.borderRadius = '0.5rem'
+                resultDiv.innerHTML = `❌ Network error: ${error.message}`
+            } finally {
+                submitBtn.disabled = false
+                submitBtn.textContent = 'Sign In → Dashboard'
+            }
+        })
+    </script>
+</body>
+</html>"""
+    return HTMLResponse(content=html_content)
 
 # Health check
 @app.get("/api/v2/health")
