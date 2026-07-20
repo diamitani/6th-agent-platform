@@ -1,8 +1,12 @@
-from fastapi import FastAPI, HTTPException, Header
+from fastapi import FastAPI, HTTPException, Header, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
-from typing import Optional
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from typing import Optional, Dict, Any
 import os
 import sys
+import jwt
+from datetime import datetime, timedelta
+import hashlib
 
 # Create FastAPI app
 app = FastAPI(
@@ -23,14 +27,167 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Constants
-FREE_TOKEN = "free-test-token"
-FREE_TEST_USER = {
-    "email": "patrick.diamitani@gmail.com",
-    "name": "Test User",
-    "plan": "free-forever",
-    "workspace": "workspace-001"
+# Security
+security = HTTPBearer()
+
+# JWT Secret (in production, use environment variable)
+JWT_SECRET = os.getenv("JWT_SECRET", "test-secret-key-change-in-production")
+JWT_ALGORITHM = "HS256"
+
+# Mock user database (in production, use Supabase/PostgreSQL)
+MOCK_USERS = {
+    "patrick.diamitani@gmail.com": {
+        "id": "user-001",
+        "email": "patrick.diamitani@gmail.com",
+        "name": "Test User",
+        "password_hash": hashlib.sha256("test123".encode()).hexdigest(),  # hash of "test123"
+        "plan": "free-forever",
+        "workspace": "workspace-001",
+        "created_at": "2026-07-01T10:00:00Z"
+    }
 }
+
+def create_access_token(email: str):
+    """Create JWT token for user"""
+    payload = {
+        "sub": email,
+        "exp": datetime.utcnow() + timedelta(days=7),
+        "iat": datetime.utcnow(),
+        "type": "access"
+    }
+    return jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
+
+def verify_token(token: str):
+    """Verify JWT token"""
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        return payload["sub"]
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    """Get current user from JWT token"""
+    token = credentials.credentials
+    email = verify_token(token)
+    
+    if email not in MOCK_USERS:
+        raise HTTPException(status_code=401, detail="User not found")
+    
+    return MOCK_USERS[email]
+
+# Authentication endpoints
+@app.post("/api/v2/auth/login")
+async def login(request: Request):
+    """Login endpoint"""
+    try:
+        data = await request.json()
+        email = data.get("email", "").lower().strip()
+        password = data.get("password", "")
+        
+        if not email or not password:
+            raise HTTPException(status_code=400, detail="Email and password required")
+        
+        # Check user exists
+        if email not in MOCK_USERS:
+            raise HTTPException(status_code=401, detail="Invalid credentials")
+        
+        user = MOCK_USERS[email]
+        
+        # Verify password (in production, use secure hashing)
+        password_hash = hashlib.sha256(password.encode()).hexdigest()
+        if password_hash != user["password_hash"]:
+            raise HTTPException(status_code=401, detail="Invalid credentials")
+        
+        # Create JWT token
+        token = create_access_token(email)
+        
+        return {
+            "access_token": token,
+            "token_type": "bearer",
+            "user": {
+                "id": user["id"],
+                "email": user["email"],
+                "name": user["name"],
+                "plan": user["plan"],
+                "workspace": user["workspace"]
+            }
+        }
+    except Exception as e:
+        if isinstance(e, HTTPException):
+            raise e
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/v2/auth/signup")
+async def signup(request: Request):
+    """Signup endpoint"""
+    try:
+        data = await request.json()
+        email = data.get("email", "").lower().strip()
+        password = data.get("password", "")
+        name = data.get("name", "").strip()
+        
+        if not email or not password or not name:
+            raise HTTPException(status_code=400, detail="Email, password, and name required")
+        
+        # Check if user already exists
+        if email in MOCK_USERS:
+            raise HTTPException(status_code=400, detail="User already exists")
+        
+        # Create new user
+        user_id = f"user-{len(MOCK_USERS) + 1:03d}"
+        password_hash = hashlib.sha256(password.encode()).hexdigest()
+        
+        MOCK_USERS[email] = {
+            "id": user_id,
+            "email": email,
+            "name": name,
+            "password_hash": password_hash,
+            "plan": "free-forever",
+            "workspace": f"workspace-{user_id}",
+            "created_at": datetime.utcnow().isoformat() + "Z"
+        }
+        
+        # Create JWT token
+        token = create_access_token(email)
+        
+        return {
+            "access_token": token,
+            "token_type": "bearer",
+            "user": {
+                "id": user_id,
+                "email": email,
+                "name": name,
+                "plan": "free-forever",
+                "workspace": f"workspace-{user_id}"
+            }
+        }
+    except Exception as e:
+        if isinstance(e, HTTPException):
+            raise e
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/v2/auth/verify")
+async def verify_token_endpoint(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    """Verify token endpoint"""
+    token = credentials.credentials
+    email = verify_token(token)
+    
+    if email not in MOCK_USERS:
+        raise HTTPException(status_code=401, detail="User not found")
+    
+    user = MOCK_USERS[email]
+    return {
+        "valid": True,
+        "user": {
+            "id": user["id"],
+            "email": user["email"],
+            "name": user["name"],
+            "plan": user["plan"],
+            "workspace": user["workspace"]
+        }
+    }
 
 # Root endpoint
 @app.get("/")
@@ -39,7 +196,11 @@ async def root():
         "app": "6th Agent Platform v2.1.0",
         "version": "2.1.0",
         "docs": "/api/v2/docs",
-        "free_test": "/api/v2/free-test",
+        "auth": {
+            "login": "/api/v2/auth/login",
+            "signup": "/api/v2/auth/signup",
+            "verify": "/api/v2/auth/verify"
+        },
         "github": "https://github.com/diamitani/6th-agent-platform",
         "vercel_url": "https://6th-agent-platform.vercel.app"
     }
@@ -49,34 +210,37 @@ async def root():
 async def health():
     return {"status": "healthy", "platform": "6th Agent SaaS v2.1.0"}
 
-# Free test account
+# Free test endpoint (for demo/quick access)
 @app.get("/api/v2/free-test")
 async def free_test():
     return {
         "message": "Free test account for platform development",
-        "special_account": FREE_TEST_USER,
-        "token": FREE_TOKEN,
-        "plan": "free-forever",
-        "features": [
-            "Up to 5 agents",
-            "Basic analytics",
-            "Email support",
-            "1GB storage"
-        ],
-        "usage": "unlimited for testing"
+        "test_account": {
+            "email": "patrick.diamitani@gmail.com",
+            "password": "test123",
+            "name": "Test User"
+        },
+        "note": "Use these credentials at /api/v2/auth/login",
+        "endpoints": {
+            "login": "POST /api/v2/auth/login",
+            "signup": "POST /api/v2/auth/signup",
+            "verify": "GET /api/v2/auth/verify"
+        }
     }
 
-# Dashboard endpoint
+# Protected endpoints
 @app.get("/api/v2/dashboard")
-async def dashboard(authorization: Optional[str] = Header(None)):
-    if authorization != f"Bearer {FREE_TOKEN}" and authorization != FREE_TOKEN:
-        raise HTTPException(status_code=401, detail="Invalid token")
-    
+async def dashboard(user: Dict[str, Any] = Depends(get_current_user)):
     return {
-        "user": FREE_TEST_USER,
+        "user": {
+            "email": user["email"],
+            "name": user["name"],
+            "plan": user["plan"],
+            "workspace": user["workspace"]
+        },
         "overview": {
             "status": "active",
-            "plan": "free-forever",
+            "plan": user["plan"],
             "workspaces": 1,
             "agents": 2,
             "storage_used": "125MB/1024MB"
@@ -96,25 +260,21 @@ async def dashboard(authorization: Optional[str] = Header(None)):
         ]
     }
 
-# Workspaces endpoint
 @app.get("/api/v2/workspaces")
-async def get_workspaces(authorization: Optional[str] = Header(None)):
-    if authorization != f"Bearer {FREE_TOKEN}" and authorization != FREE_TOKEN:
-        raise HTTPException(status_code=401, detail="Invalid token")
-    
+async def get_workspaces(user: Dict[str, Any] = Depends(get_current_user)):
     return {
         "current_workspace": {
-            "id": "workspace-001",
-            "name": "Test Workspace",
-            "owner": FREE_TEST_USER["email"],
-            "plan": "free-forever",
+            "id": user["workspace"],
+            "name": f"{user['name']}'s Workspace",
+            "owner": user["email"],
+            "plan": user["plan"],
             "members": 1,
-            "created": "2026-07-20T10:00:00Z"
+            "created": user.get("created_at", "2026-07-20T10:00:00Z")
         },
         "workspaces": [
             {
-                "id": "workspace-001",
-                "name": "Test Workspace",
+                "id": user["workspace"],
+                "name": f"{user['name']}'s Workspace",
                 "role": "admin",
                 "members": 1,
                 "agents": 2,
@@ -123,12 +283,8 @@ async def get_workspaces(authorization: Optional[str] = Header(None)):
         ]
     }
 
-# Agents endpoint
 @app.get("/api/v2/agents")
-async def get_agents(authorization: Optional[str] = Header(None)):
-    if authorization != f"Bearer {FREE_TOKEN}" and authorization != FREE_TOKEN:
-        raise HTTPException(status_code=401, detail="Invalid token")
-    
+async def get_agents(user: Dict[str, Any] = Depends(get_current_user)):
     return {
         "agents": [
             {
@@ -158,16 +314,12 @@ async def get_agents(authorization: Optional[str] = Header(None)):
         }
     }
 
-# Billing endpoint
 @app.get("/api/v2/billing")
-async def get_billing(authorization: Optional[str] = Header(None)):
-    if authorization != f"Bearer {FREE_TOKEN}" and authorization != FREE_TOKEN:
-        raise HTTPException(status_code=401, detail="Invalid token")
-    
+async def get_billing(user: Dict[str, Any] = Depends(get_current_user)):
     return {
         "plan": {
-            "name": "free-forever",
-            "price": "$0",
+            "name": user["plan"],
+            "price": "$0" if user["plan"] == "free-forever" else "$29/month",
             "cycle": "monthly",
             "status": "active",
             "features": [
@@ -183,7 +335,7 @@ async def get_billing(authorization: Optional[str] = Header(None)):
                 "end": "2026-07-31",
                 "agents_used": 2,
                 "storage_used": "125MB",
-                "cost_estimate": "$0"
+                "cost_estimate": "$0" if user["plan"] == "free-forever" else "$13.31"
             },
             "cost_breakdown": {
                 "aws_bedrock": "$12.89/month (estimated for paid plans)",
@@ -193,12 +345,8 @@ async def get_billing(authorization: Optional[str] = Header(None)):
         }
     }
 
-# Analytics endpoint
 @app.get("/api/v2/analytics")
-async def get_analytics(authorization: Optional[str] = Header(None)):
-    if authorization != f"Bearer {FREE_TOKEN}" and authorization != FREE_TOKEN:
-        raise HTTPException(status_code=401, detail="Invalid token")
-    
+async def get_analytics(user: Dict[str, Any] = Depends(get_current_user)):
     return {
         "key_metrics": {
             "tasks_per_day": 42,
@@ -226,16 +374,13 @@ async def get_analytics(authorization: Optional[str] = Header(None)):
         }
     }
 
-# Search endpoint
 @app.post("/api/v2/search")
 async def perform_search(
-    query: dict,
-    authorization: Optional[str] = Header(None)
+    request: Request,
+    user: Dict[str, Any] = Depends(get_current_user)
 ):
-    if authorization != f"Bearer {FREE_TOKEN}" and authorization != FREE_TOKEN:
-        raise HTTPException(status_code=401, detail="Invalid token")
-    
-    search_query = query.get("query", "test")
+    data = await request.json()
+    search_query = data.get("query", "test")
     
     return {
         "results": [
@@ -258,6 +403,3 @@ async def perform_search(
         "count": 2,
         "cost": "$0.0031"
     }
-
-# For Vercel deployment
-# No __main__ needed for Vercel serverless functions
