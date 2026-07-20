@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.py",
+      "use": "@vercel/python",
+      "config": { "maxLambdaSize": "15mb" }
+    }
+  ],
+  "routes": [
+    { "src": "/api/v2/(.*)", "dest": "api/index.py" },
+    { "src": "/", "headers": { "Location": "/api/v2/docs" }, "status": 301 },
+    { "src": "/(.*)", "dest": "api/index.py" }
+  ],
+  "env": {
+    "PYTHON_VERSION": "3.11"
+  },
+  "github": {
+    "enabled": true,
+    "silent": true
+  },
+  "regions": ["iad1"]
+}
