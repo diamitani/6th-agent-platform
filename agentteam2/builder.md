@@ -34,7 +34,7 @@ Pat is non-technical. You give him copy-paste answers. Always include the file p
 | Database | Supabase + PostgreSQL | Free tier, auth built-in |
 | Auth | Supabase Auth | Free, works with Next.js |
 | Deploy | Vercel | GitHub → auto-deploy |
-| LLM | Claude API | `claude-sonnet-4-20250514` |
+| LLM | Claude API | `claude-sonnet-4-5-20250929` |
 | Payments | Stripe | Industry standard |
 | Storage | Supabase Storage | Files + images |
 
@@ -108,7 +108,7 @@ export async function runManager(
   };
 
   const response = await client.messages.create({
-    model: "claude-sonnet-4-20250514",
+    model: "claude-sonnet-4-5-20250929",
     max_tokens: 1000,
     system: systemPrompts[managerType],
     messages: [{ role: "user", content: userInput }],

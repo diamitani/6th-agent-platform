@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 // ============================================================
 // AGENT BUILDER v1 — Pat Diamitani / Artispreneur OS
 // Stack: React (artifact) → maps to Next.js 15 in production
-// Powered by Claude API (claude-sonnet-4-20250514)
+// Powered by Claude API (claude-sonnet-4-5-20250929)
 // ============================================================
 
 const COLORS = {
@@ -654,7 +654,7 @@ const Chat = ({ agents, knowledgeDocs }) => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
+          model: "claude-sonnet-4-5-20250929",
           max_tokens: 1000,
           system: buildSystemPrompt(),
           messages: [...messages, userMsg].map(m => ({ role: m.role, content: m.content })),

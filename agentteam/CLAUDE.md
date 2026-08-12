@@ -102,7 +102,7 @@ Phase 5: ITERATE    → Real users → feedback → v1.1
 | Auth | Supabase Auth or Clerk |
 | Deploy (FE) | Vercel |
 | Deploy (BE) | Railway.app |
-| LLM | Claude API — `claude-sonnet-4-20250514` |
+| LLM | Claude API — `claude-sonnet-4-5-20250929` |
 | Storage | Supabase Storage |
 | Payments | Stripe |
 | Monitoring | Sentry + Vercel Analytics |
@@ -170,7 +170,7 @@ export async function runAgent(
   history: { role: "user" | "assistant"; content: string }[] = []
 ) {
   const response = await client.messages.create({
-    model: "claude-sonnet-4-20250514",
+    model: "claude-sonnet-4-5-20250929",
     max_tokens: 1000,
     system: systemPrompt,
     messages: [...history, { role: "user", content: userInput }],
@@ -209,7 +209,7 @@ CREATE TABLE agent_runs (
   project_id UUID REFERENCES projects(id) ON DELETE SET NULL,
   input TEXT,
   output TEXT,
-  model TEXT DEFAULT 'claude-sonnet-4-20250514',
+  model TEXT DEFAULT 'claude-sonnet-4-5-20250929',
   created_at TIMESTAMPTZ DEFAULT now()
 );
 

@@ -36,7 +36,7 @@ Tech stack:
 - Next.js 15 + TypeScript
 - Tailwind CSS + shadcn/ui
 - Supabase (PostgreSQL + Auth + Storage)
-- Anthropic Claude API (claude-sonnet-4-20250514)
+- Anthropic Claude API (claude-sonnet-4-5-20250929)
 - Stripe for payments
 - Vercel for deployment
 - Zustand for state
@@ -195,7 +195,7 @@ Requirements:
    - Include NPAO notes if set
 
 4. Call Claude API:
-   model: claude-sonnet-4-20250514
+   model: claude-sonnet-4-5-20250929
    max_tokens: 1000
    Use streaming (ReadableStream) for real-time response
 

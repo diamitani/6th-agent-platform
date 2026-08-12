@@ -1,6 +1,6 @@
 {
   "name": "6thagent",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "6thAgent — Build, deploy, and manage AI agent teams. ROSTR-powered, FPE-driven.",
   "private": true,
   "scripts": {
